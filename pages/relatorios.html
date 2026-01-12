@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - RS Contabilidade</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Partículas de fundo -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>RS CONTABILIDADE</h1>
+                    <span>Análise de Equipamentos</span>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+                <a href="relatorios.html" class="nav-link active">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="sugestoes.html" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Sugestões</span>
+                </a>
+                <a href="contato.html" class="nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contato</span>
+                </a>
+            </nav>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-hero-content">
+                <div class="breadcrumb">
+                    <a href="../index.html">Início</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Relatórios</span>
+                </div>
+                <h1><i class="fas fa-file-alt"></i> Relatórios</h1>
+                <p>Acesse os relatórios detalhados de análise dos equipamentos</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Relatórios Section -->
+    <section class="content-section">
+        <div class="container">
+            <!-- Relatórios Gerais -->
+            <div class="section-block glass-card fade-in-up">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div>
+                        <h2>Relatórios Gerais</h2>
+                        <p>Visão geral de todos os equipamentos</p>
+                    </div>
+                </div>
+                <div class="reports-grid">
+                    <a href="#" class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="report-info">
+                            <h3>Relatório Completo</h3>
+                            <p>Análise de todos os 15 computadores</p>
+                            <span class="report-date"><i class="fas fa-calendar"></i> Janeiro 2026</span>
+                        </div>
+                        <div class="report-action">
+                            <i class="fas fa-download"></i>
+                        </div>
+                    </a>
+                    <a href="#" class="report-card">
+                        <div class="report-icon excel">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <div class="report-info">
+                            <h3>Planilha de Dados</h3>
+                            <p>Especificações em formato Excel</p>
+                            <span class="report-date"><i class="fas fa-calendar"></i> Janeiro 2026</span>
+                        </div>
+                        <div class="report-action">
+                            <i class="fas fa-download"></i>
+                        </div>
+                    </a>
+                    <a href="#" class="report-card">
+                        <div class="report-icon chart">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="report-info">
+                            <h3>Resumo Executivo</h3>
+                            <p>Principais pontos e recomendações</p>
+                            <span class="report-date"><i class="fas fa-calendar"></i> Janeiro 2026</span>
+                        </div>
+                        <div class="report-action">
+                            <i class="fas fa-download"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Relatórios por PC -->
+            <div class="section-block glass-card fade-in-up" style="animation-delay: 0.1s;">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <div>
+                        <h2>Relatórios Individuais</h2>
+                        <p>Relatório detalhado de cada computador</p>
+                    </div>
+                </div>
+                <div class="individual-reports" id="individualReports">
+                    <!-- Gerado via JS -->
+                </div>
+            </div>
+
+            <!-- Links Externos -->
+            <div class="section-block glass-card fade-in-up" style="animation-delay: 0.2s;">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
+                    <div>
+                        <h2>Links Úteis</h2>
+                        <p>Recursos externos e documentação</p>
+                    </div>
+                </div>
+                <div class="links-section">
+                    <a href="#" class="external-link-card" target="_blank">
+                        <i class="fab fa-google-drive"></i>
+                        <span>Google Drive</span>
+                        <small>Pasta com documentos</small>
+                    </a>
+                    <a href="#" class="external-link-card" target="_blank">
+                        <i class="fas fa-table"></i>
+                        <span>Google Planilhas</span>
+                        <small>Planilha principal</small>
+                    </a>
+                    <a href="#" class="external-link-card" target="_blank">
+                        <i class="fas fa-cloud"></i>
+                        <span>Backup Online</span>
+                        <small>Arquivos de backup</small>
+                    </a>
+                    <a href="#" class="external-link-card" target="_blank">
+                        <i class="fas fa-book"></i>
+                        <span>Documentação</span>
+                        <small>Manual de uso</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon small">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <span>RS CONTABILIDADE</span>
+                    </div>
+                    <p>Análise técnica de equipamentos para otimização do seu negócio.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navegação</h4>
+                    <a href="../index.html">Início</a>
+                    <a href="relatorios.html">Relatórios</a>
+                    <a href="sugestoes.html">Sugestões</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> contato@rscontabilidade.com</p>
+                    <p><i class="fas fa-phone"></i> (XX) XXXXX-XXXX</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RS Contabilidade. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/particles.js"></script>
+    <script>
+        // Mobile menu
+        document.getElementById('menuToggle')?.addEventListener('click', () => {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Render individual reports
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('individualReports');
+            if (container && window.pcsData) {
+                container.innerHTML = window.pcsData.map(pc => `
+                    <a href="#" class="individual-report-item">
+                        <div class="report-pc-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="report-pc-info">
+                            <h4>${pc.nome}</h4>
+                            <span>${pc.usuario} - ${pc.setor}</span>
+                        </div>
+                        <span class="status-badge ${pc.status}">
+                            ${pc.status === 'ok' ? 'Bom' : pc.status === 'atencao' ? 'Atenção' : 'Crítico'}
+                        </span>
+                        <i class="fas fa-file-pdf"></i>
+                    </a>
+                `).join('');
+            }
+        });
+    </script>
+</body>
+</html>

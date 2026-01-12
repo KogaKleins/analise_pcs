@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS Contabilidade - Análise de Computadores</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/interactions.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+    <!-- Meta tags -->
+    <meta name="description" content="Análise técnica de computadores da RS Contabilidade">
+    <meta name="theme-color" content="#8B0000">
+</head>
+<body>
+    <!-- Partículas de fundo -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>RS CONTABILIDADE</h1>
+                    <span>Análise de Equipamentos</span>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+                <a href="pages/relatorios.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="pages/sugestoes.html" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Sugestões</span>
+                </a>
+                <a href="pages/contato.html" class="nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contato</span>
+                </a>
+            </nav>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-desktop"></i>
+                <span>Análise Completa</span>
+            </div>
+            <h2>Diagnóstico dos <span class="highlight">Computadores</span></h2>
+            <p>Confira abaixo a análise detalhada de cada equipamento da sua empresa. Clique em um card para ver informações completas.</p>
+            <div class="hero-stats">
+                <div class="stat-item glass-card">
+                    <i class="fas fa-desktop"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalPCs">15</span>
+                        <span class="stat-label">Computadores</span>
+                    </div>
+                </div>
+                <div class="stat-item glass-card">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="pcsOk">0</span>
+                        <span class="stat-label">Em bom estado</span>
+                    </div>
+                </div>
+                <div class="stat-item glass-card">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="pcsAtencao">0</span>
+                        <span class="stat-label">Atenção</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters glass-card">
+                <div class="filter-group">
+                    <label>Filtrar por status:</label>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">
+                            <i class="fas fa-th"></i> Todos
+                        </button>
+                        <button class="filter-btn" data-filter="ok">
+                            <i class="fas fa-check"></i> Bom Estado
+                        </button>
+                        <button class="filter-btn" data-filter="atencao">
+                            <i class="fas fa-exclamation"></i> Atenção
+                        </button>
+                        <button class="filter-btn" data-filter="critico">
+                            <i class="fas fa-times"></i> Crítico
+                        </button>
+                    </div>
+                </div>
+                <div class="search-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por nome ou setor...">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grid de Cards dos PCs -->
+    <section class="pcs-section">
+        <div class="container">
+            <div class="pcs-grid" id="pcsGrid">
+                <!-- Cards serão inseridos via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Detalhes -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal glass-card" id="pcModal">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-desktop"></i>
+                </div>
+                <div class="modal-title">
+                    <h3 id="modalPcName">Nome do PC</h3>
+                    <span class="modal-subtitle" id="modalPcUser">Usuário</span>
+                </div>
+                <div class="modal-status" id="modalStatus">
+                    <span class="status-badge">Bom Estado</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="specs-grid" id="modalSpecs">
+                    <!-- Especificações serão inseridas via JS -->
+                </div>
+                <div class="modal-section">
+                    <h4><i class="fas fa-clipboard-list"></i> Observações</h4>
+                    <p id="modalObservacoes">-</p>
+                </div>
+                <div class="modal-section">
+                    <h4><i class="fas fa-tools"></i> Recomendações</h4>
+                    <ul id="modalRecomendacoes">
+                        <!-- Recomendações inseridas via JS -->
+                    </ul>
+                </div>
+                <div class="modal-links">
+                    <h4><i class="fas fa-link"></i> Links Úteis</h4>
+                    <div class="links-grid" id="modalLinks">
+                        <!-- Links inseridos via JS -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-secondary" id="modalRelatorio">
+                    <i class="fas fa-file-pdf"></i> Ver Relatório Completo
+                </a>
+                <a href="#" class="btn btn-primary" id="modalCompra">
+                    <i class="fas fa-shopping-cart"></i> Sugestões de Upgrade
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon small">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <span>RS CONTABILIDADE</span>
+                    </div>
+                    <p>Análise técnica de equipamentos para otimização do seu negócio.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navegação</h4>
+                    <a href="index.html">Início</a>
+                    <a href="pages/relatorios.html">Relatórios</a>
+                    <a href="pages/sugestoes.html">Sugestões</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> contato@rscontabilidade.com</p>
+                    <p><i class="fas fa-phone"></i> (XX) XXXXX-XXXX</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RS Contabilidade. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/interactions.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
