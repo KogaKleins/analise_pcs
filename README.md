@@ -1,15 +1,46 @@
-# RS Contabilidade - Análise de Computadores
+# RS Contabilidade - Sistema de Análise de Equipamentos
 
-Site profissional para apresentação de análise de computadores da RS Contabilidade.
+Sistema web profissional para gerenciamento e análise de computadores da RS Contabilidade.
+
+**Desenvolvido por:** Wilmar Izequiel Kleinschmidt  
+**Email:** kogakleinscleins@gmail.com  
+**Telefone:** (48) 99185-0299
+
+---
 
 ## 🚀 Funcionalidades
 
-- **Dashboard Principal**: Cards interativos com todos os 15 computadores
-- **Filtros**: Por status (Bom Estado, Atenção, Crítico) e busca por nome/setor
-- **Modal de Detalhes**: Especificações completas de cada PC
-- **Relatórios**: Página dedicada com links para relatórios e documentos
-- **Sugestões de Compra**: Recomendações de upgrades e orçamentos
-- **Contato**: Formulário e informações de contato
+### Sistema de Autenticação
+- **Login seguro** com dois níveis de acesso
+- **Admin**: Acesso completo ao painel administrativo
+- **Usuário**: Visualização apenas
+
+### Dashboard Principal
+- Cards interativos com todos os equipamentos
+- Filtros por status (Bom Estado, Atenção, Crítico)
+- Busca por nome, usuário ou setor
+- Estatísticas em tempo real
+
+### Painel Administrativo (Admin)
+- **CRUD de Equipamentos**: Criar, editar, excluir computadores
+- **Gerenciamento de Links**: Links de compra para upgrades
+- **Configurações**: Personalização do sistema
+- **Exportar/Importar**: Backup em JSON
+
+### Relatórios e Sugestões
+- Relatórios individuais por equipamento
+- Sugestões de upgrade priorizadas
+- Links diretos para compra
+
+## 🔐 Credenciais de Acesso
+
+### Administrador
+- **Usuário:** `WIlmarkogakleins`
+- **Senha:** `WILMARkk793!!@#..77ISSO`
+
+### Cliente (RS Contabilidade)
+- **Usuário:** `RS contabilidade`
+- **Senha:** `Rs3434-4099!@@#equipamentos??`
 
 ## 🎨 Design
 
@@ -19,119 +50,93 @@ Site profissional para apresentação de análise de computadores da RS Contabil
 - 100% responsivo (mobile-first)
 - Partículas decorativas no fundo
 
-## 📁 Estrutura
+## 📁 Estrutura do Projeto
 
 ```
 analise_PCs/
-├── index.html              # Página principal
+├── index.html              # Dashboard principal
+├── login.html              # Página de autenticação
 ├── vercel.json             # Config para deploy
+├── README.md               # Documentação
 ├── css/
 │   ├── main.css           # Estilos principais
 │   ├── components.css     # Cards, modal, botões
 │   ├── animations.css     # Animações e efeitos
+│   ├── auth.css           # Estilos de autenticação
+│   ├── admin.css          # Estilos do painel admin
 │   └── pages.css          # Estilos das páginas internas
 ├── js/
-│   ├── data.js            # Dados dos 15 computadores
-│   ├── main.js            # Lógica principal
+│   ├── auth.js            # Sistema de autenticação
+│   ├── storage.js         # Gerenciamento de dados (localStorage/JSON)
+│   ├── admin.js           # Lógica do painel admin
+│   ├── app.js             # Lógica principal
+│   ├── utils.js           # Funções utilitárias
+│   ├── components.js      # Componentes reutilizáveis
+│   ├── interactions.js    # Microinterações
 │   └── particles.js       # Sistema de partículas
-├── pages/
-│   ├── relatorios.html    # Página de relatórios
-│   ├── sugestoes.html     # Sugestões de compra
-│   └── contato.html       # Página de contato
-└── assets/                # Imagens e recursos
+└── pages/
+    ├── admin.html         # Painel administrativo
+    ├── relatorios.html    # Página de relatórios
+    └── sugestoes.html     # Sugestões de compra
 ```
 
-## ⚙️ Como Editar os Dados dos PCs
+## 💾 Sistema de Dados
 
-Edite o arquivo `js/data.js`. Cada PC tem esta estrutura:
+Os dados são armazenados em **localStorage** com estrutura preparada para migração futura para banco de dados.
 
+### Estrutura de Equipamento:
 ```javascript
 {
-    id: 1,
+    id: "unique_id",
     nome: "PC-01",
     usuario: "Nome do Usuário",
-    setor: "Setor",
-    status: "ok", // ok, atencao, critico
-    specs: {
-        ram: {
-            total: "8 GB",
-            tipo: "DDR4",
-            detalhe: "Dual Channel"
-        },
-        armazenamento: {
-            tipo: "SSD SATA",
-            capacidade: "447 GB",
-            usado: "180 GB"
-        },
-        processador: {
-            modelo: "Intel Core i5",
-            geracao: "6ª Geração",
-            nucleos: "4 núcleos",
-            frequencia: "3.19 GHz"
-        },
-        sistemaOperacional: "Windows 10 Pro",
-        placaMae: "-",
-        gpu: "Intel HD Graphics 530"
-    },
-    observacoes: "Descrição do estado...",
-    recomendacoes: [
-        "Recomendação 1",
-        "Recomendação 2"
-    ],
-    links: {
-        relatorio: "URL do relatório PDF",
-        compraRam: "URL para comprar RAM",
-        compraSSD: "URL para comprar SSD",
-        compraProcessador: "URL para comprar processador"
-    }
+    setor: "Contabilidade",
+    status: "bom", // bom, atencao, critico
+    processador: "Intel Core i5-10400",
+    cpuScore: 75,
+    ram: "8GB DDR4",
+    ramScore: 50,
+    storage: "SSD 256GB",
+    storageScore: 80,
+    gpu: "Intel UHD 630",
+    so: "Windows 11 Pro",
+    observacoes: "Texto de observações",
+    recomendacoes: "Texto de recomendações"
 }
 ```
 
+### Exportar/Importar Dados
+1. Acesse o **Painel Administrativo** como admin
+2. Vá na aba **Exportar/Importar**
+3. Clique em **Exportar JSON** para backup
+4. Use **Importar JSON** para restaurar dados
+
 ## 🌐 Deploy no Vercel
 
-### Opção 1: Via CLI
+### Via GitHub (Recomendado)
 
-1. Instale o Vercel CLI:
-   ```bash
-   npm install -g vercel
-   ```
-
-2. Na pasta do projeto, execute:
-   ```bash
-   vercel
-   ```
-
-3. Siga as instruções na tela
-
-### Opção 2: Via GitHub
-
-1. Faça upload do projeto para um repositório GitHub
+1. Faça push para seu repositório GitHub
 2. Acesse [vercel.com](https://vercel.com)
-3. Clique em "New Project"
-4. Importe o repositório
-5. Clique em "Deploy"
+3. Importe o repositório
+4. Clique em **Deploy**
 
-## 📝 Personalizações
+### Via CLI
 
-### Alterar informações de contato:
-- Edite os arquivos HTML (index.html e páginas em /pages)
-- Busque por "contato@rscontabilidade.com" e "(XX) XXXXX-XXXX"
+```bash
+# Instalar Vercel CLI
+npm install -g vercel
 
-### Alterar cores do tema:
-- Edite `css/main.css`
-- Modifique as variáveis CSS no `:root`
+# Na pasta do projeto
+vercel
 
-### Adicionar links de compra:
-- Edite `js/data.js`
-- Preencha os campos dentro de `links: {}`
+# Para produção
+vercel --prod
+```
 
-## 📱 Responsividade
+## 📝 Licença
 
-O site é totalmente responsivo:
-- Desktop: Layout completo com grid de cards
-- Tablet: Adaptações de layout
-- Mobile: Menu hamburguer, cards em coluna única
+Projeto desenvolvido exclusivamente para RS Contabilidade.
 
 ---
 
-Desenvolvido para **RS Contabilidade** | 2026
+© 2026 - Desenvolvido por **Wilmar Izequiel Kleinschmidt**

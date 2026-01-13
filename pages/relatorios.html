@@ -40,11 +40,20 @@
                     <i class="fas fa-shopping-cart"></i>
                     <span>Sugestões</span>
                 </a>
-                <a href="contato.html" class="nav-link">
-                    <i class="fas fa-envelope"></i>
-                    <span>Contato</span>
+                <a href="admin.html" class="nav-link admin-only" id="adminLink" style="display: none;">
+                    <i class="fas fa-cogs"></i>
+                    <span>Admin</span>
                 </a>
             </nav>
+            <div class="user-menu">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userNameDisplay">Usuário</span>
+                </div>
+                <button class="btn-logout" id="btnLogout" title="Sair">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
@@ -196,20 +205,37 @@
                     <a href="sugestoes.html">Sugestões</a>
                 </div>
                 <div class="footer-contact">
-                    <h4>Contato</h4>
-                    <p><i class="fas fa-envelope"></i> contato@rscontabilidade.com</p>
-                    <p><i class="fas fa-phone"></i> (XX) XXXXX-XXXX</p>
+                    <h4>Desenvolvedor</h4>
+                    <p><i class="fas fa-user"></i> Wilmar Izequiel Kleinschmidt</p>
+                    <p><i class="fas fa-envelope"></i> kogakleinscleins@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> (48) 99185-0299</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 RS Contabilidade. Todos os direitos reservados.</p>
+                <p>&copy; 2026 RS Contabilidade. Sistema desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
             </div>
         </div>
     </footer>
 
-    <script src="../js/data.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/storage.js"></script>
     <script src="../js/particles.js"></script>
     <script>
+        // Verificar autenticação
+        if (!Auth.isAuthenticated()) {
+            window.location.href = '../login.html';
+        } else {
+            // Setup UI
+            const session = Auth.getSession();
+            document.getElementById('userNameDisplay').textContent = session.name;
+            
+            if (session.role === 'admin') {
+                document.getElementById('adminLink').style.display = 'flex';
+            }
+            
+            document.getElementById('btnLogout').addEventListener('click', () => Auth.logout());
+        }
+
         // Mobile menu
         document.getElementById('menuToggle')?.addEventListener('click', () => {
             document.querySelector('.nav-menu').classList.toggle('active');
@@ -225,25 +251,31 @@
             }
         });
 
-        // Render individual reports
+        // Render individual reports from Storage
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('individualReports');
-            if (container && window.pcsData) {
-                container.innerHTML = window.pcsData.map(pc => `
-                    <a href="#" class="individual-report-item">
-                        <div class="report-pc-icon">
-                            <i class="fas fa-desktop"></i>
-                        </div>
-                        <div class="report-pc-info">
-                            <h4>${pc.nome}</h4>
-                            <span>${pc.usuario} - ${pc.setor}</span>
-                        </div>
-                        <span class="status-badge ${pc.status}">
-                            ${pc.status === 'ok' ? 'Bom' : pc.status === 'atencao' ? 'Atenção' : 'Crítico'}
-                        </span>
-                        <i class="fas fa-file-pdf"></i>
-                    </a>
-                `).join('');
+            const equipamentos = Storage.getEquipamentos();
+            
+            if (container) {
+                if (equipamentos.length === 0) {
+                    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); padding: 20px; text-align: center;">Nenhum equipamento cadastrado ainda.</p>';
+                } else {
+                    container.innerHTML = equipamentos.map(pc => `
+                        <a href="#" class="individual-report-item">
+                            <div class="report-pc-icon">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <div class="report-pc-info">
+                                <h4>${pc.nome}</h4>
+                                <span>${pc.usuario || 'N/A'} - ${pc.setor || 'N/A'}</span>
+                            </div>
+                            <span class="status-badge ${pc.status === 'ok' ? 'bom' : pc.status}">
+                                ${pc.status === 'bom' || pc.status === 'ok' ? 'Bom' : pc.status === 'atencao' ? 'Atenção' : 'Crítico'}
+                            </span>
+                            <i class="fas fa-file-pdf"></i>
+                        </a>
+                    `).join('');
+                }
             }
         });
     </script>

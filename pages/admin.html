@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo | RS Contabilidade</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <i class="fas fa-desktop"></i>
+                    <span>RS Contabilidade</span>
+                    <span class="admin-badge">ADMIN</span>
+                </a>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="../index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                        <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                        <li><a href="sugestoes.html"><i class="fas fa-shopping-cart"></i> Sugestões</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <div class="user-info">
+                        <i class="fas fa-user-shield"></i>
+                        <span id="userName">Admin</span>
+                    </div>
+                    <button class="btn-logout" onclick="Auth.logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="admin-header">
+                <div class="admin-title">
+                    <h1><i class="fas fa-cogs"></i> Painel Administrativo</h1>
+                    <p>Gerencie equipamentos, links e dados do sistema</p>
+                </div>
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-desktop"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalEquipamentos">0</span>
+                            <span class="stat-label">Equipamentos</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalBom">0</span>
+                            <span class="stat-label">Bom Estado</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalAtencao">0</span>
+                            <span class="stat-label">Atenção</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="equipamentos">
+                    <i class="fas fa-desktop"></i>
+                    Equipamentos
+                </button>
+                <button class="tab-btn" data-tab="links">
+                    <i class="fas fa-link"></i>
+                    Links de Compra
+                </button>
+                <button class="tab-btn" data-tab="configuracoes">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </button>
+                <button class="tab-btn" data-tab="exportar">
+                    <i class="fas fa-download"></i>
+                    Exportar/Importar
+                </button>
+            </div>
+
+            <!-- Tab: Equipamentos -->
+            <div class="tab-content active" id="tab-equipamentos">
+                <div class="content-header">
+                    <h2>Gerenciar Equipamentos</h2>
+                    <button class="btn-primary" id="btnNovoEquipamento">
+                        <i class="fas fa-plus"></i>
+                        Novo Equipamento
+                    </button>
+                </div>
+
+                <!-- Lista de Equipamentos -->
+                <div class="equipment-list" id="equipmentList">
+                    <!-- Equipamentos serão inseridos via JS -->
+                </div>
+
+                <!-- Estado vazio -->
+                <div class="empty-state" id="emptyState">
+                    <i class="fas fa-inbox"></i>
+                    <h3>Nenhum equipamento cadastrado</h3>
+                    <p>Clique no botão "Novo Equipamento" para começar</p>
+                </div>
+            </div>
+
+            <!-- Tab: Links -->
+            <div class="tab-content" id="tab-links">
+                <div class="content-header">
+                    <h2>Links de Compra Sugeridos</h2>
+                    <button class="btn-primary" id="btnNovoLink">
+                        <i class="fas fa-plus"></i>
+                        Novo Link
+                    </button>
+                </div>
+
+                <div class="links-list" id="linksList">
+                    <!-- Links serão inseridos via JS -->
+                </div>
+
+                <div class="empty-state" id="emptyLinks">
+                    <i class="fas fa-link"></i>
+                    <h3>Nenhum link cadastrado</h3>
+                    <p>Adicione links de compra para RAM, SSD, etc.</p>
+                </div>
+            </div>
+
+            <!-- Tab: Configurações -->
+            <div class="tab-content" id="tab-configuracoes">
+                <div class="content-header">
+                    <h2>Configurações do Sistema</h2>
+                </div>
+
+                <div class="config-section">
+                    <h3><i class="fas fa-building"></i> Informações do Cliente</h3>
+                    <div class="config-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nome da Empresa</label>
+                                <input type="text" id="configEmpresa" value="RS Contabilidade">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="configEmail" placeholder="email@empresa.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input type="tel" id="configTelefone" placeholder="(00) 00000-0000">
+                            </div>
+                            <div class="form-group">
+                                <label>Endereço</label>
+                                <input type="text" id="configEndereco" placeholder="Endereço completo">
+                            </div>
+                        </div>
+                        <button class="btn-primary" id="btnSalvarConfig">
+                            <i class="fas fa-save"></i>
+                            Salvar Configurações
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <h3><i class="fas fa-palette"></i> Aparência</h3>
+                    <div class="config-form">
+                        <div class="form-group">
+                            <label>Cor Principal</label>
+                            <input type="color" id="configCor" value="#8B0000">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Exportar/Importar -->
+            <div class="tab-content" id="tab-exportar">
+                <div class="content-header">
+                    <h2>Exportar e Importar Dados</h2>
+                </div>
+
+                <div class="export-section">
+                    <div class="export-card">
+                        <i class="fas fa-download"></i>
+                        <h3>Exportar Dados</h3>
+                        <p>Baixe todos os dados em formato JSON para backup ou migração</p>
+                        <button class="btn-primary" id="btnExportar">
+                            <i class="fas fa-file-export"></i>
+                            Exportar JSON
+                        </button>
+                    </div>
+
+                    <div class="export-card">
+                        <i class="fas fa-upload"></i>
+                        <h3>Importar Dados</h3>
+                        <p>Importe dados de um arquivo JSON</p>
+                        <input type="file" id="importFile" accept=".json" hidden>
+                        <button class="btn-secondary" id="btnImportar">
+                            <i class="fas fa-file-import"></i>
+                            Importar JSON
+                        </button>
+                    </div>
+
+                    <div class="export-card danger">
+                        <i class="fas fa-trash-alt"></i>
+                        <h3>Limpar Dados</h3>
+                        <p>Remove todos os dados do sistema (irreversível)</p>
+                        <button class="btn-danger" id="btnLimpar">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Limpar Tudo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Novo/Editar Equipamento -->
+    <div class="modal" id="modalEquipamento">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modalEquipamentoTitle">Novo Equipamento</h2>
+                <button class="modal-close" onclick="AdminPanel.closeModal('modalEquipamento')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEquipamento">
+                    <input type="hidden" id="equipamentoId">
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-info-circle"></i> Informações Básicas</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nome do Equipamento *</label>
+                                <input type="text" id="eqNome" placeholder="Ex: PC-01, Recepção, etc." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Usuário</label>
+                                <input type="text" id="eqUsuario" placeholder="Nome do usuário">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Setor/Localização</label>
+                                <input type="text" id="eqSetor" placeholder="Ex: Contabilidade, RH, etc.">
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="eqStatus">
+                                    <option value="bom">Bom</option>
+                                    <option value="atencao">Atenção</option>
+                                    <option value="critico">Crítico</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-microchip"></i> Especificações de Hardware</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Processador</label>
+                                <input type="text" id="eqProcessador" placeholder="Ex: Intel Core i5-10400">
+                            </div>
+                            <div class="form-group">
+                                <label>Pontuação CPU (0-100)</label>
+                                <input type="number" id="eqCpuScore" min="0" max="100" placeholder="75">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Memória RAM</label>
+                                <input type="text" id="eqRam" placeholder="Ex: 8GB DDR4">
+                            </div>
+                            <div class="form-group">
+                                <label>Pontuação RAM (0-100)</label>
+                                <input type="number" id="eqRamScore" min="0" max="100" placeholder="50">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Armazenamento</label>
+                                <input type="text" id="eqStorage" placeholder="Ex: SSD 256GB">
+                            </div>
+                            <div class="form-group">
+                                <label>Pontuação Storage (0-100)</label>
+                                <input type="number" id="eqStorageScore" min="0" max="100" placeholder="80">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Placa de Vídeo</label>
+                                <input type="text" id="eqGpu" placeholder="Ex: Intel UHD 630">
+                            </div>
+                            <div class="form-group">
+                                <label>Sistema Operacional</label>
+                                <input type="text" id="eqSo" placeholder="Ex: Windows 11 Pro">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-clipboard-list"></i> Observações e Recomendações</h3>
+                        <div class="form-group">
+                            <label>Observações</label>
+                            <textarea id="eqObservacoes" rows="3" placeholder="Notas adicionais sobre o equipamento..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Recomendações de Upgrade</label>
+                            <textarea id="eqRecomendacoes" rows="3" placeholder="Sugestões de melhorias..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="AdminPanel.closeModal('modalEquipamento')">Cancelar</button>
+                <button class="btn-primary" id="btnSalvarEquipamento">
+                    <i class="fas fa-save"></i>
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Novo/Editar Link -->
+    <div class="modal" id="modalLink">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalLinkTitle">Novo Link de Compra</h2>
+                <button class="modal-close" onclick="AdminPanel.closeModal('modalLink')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formLink">
+                    <input type="hidden" id="linkId">
+                    
+                    <div class="form-group">
+                        <label>Categoria *</label>
+                        <select id="linkCategoria" required>
+                            <option value="">Selecione...</option>
+                            <option value="ram">Memória RAM</option>
+                            <option value="ssd">SSD/Armazenamento</option>
+                            <option value="processador">Processador</option>
+                            <option value="gpu">Placa de Vídeo</option>
+                            <option value="periferico">Periféricos</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Título do Produto *</label>
+                        <input type="text" id="linkTitulo" placeholder="Ex: Memória Kingston 8GB DDR4" required>
+                    </div>
+                    <div class="form-group">
+                        <label>URL do Produto *</label>
+                        <input type="url" id="linkUrl" placeholder="https://..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preço (R$)</label>
+                        <input type="text" id="linkPreco" placeholder="199,90">
+                    </div>
+                    <div class="form-group">
+                        <label>Loja</label>
+                        <input type="text" id="linkLoja" placeholder="Ex: Amazon, Kabum, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label>Observações</label>
+                        <textarea id="linkObs" rows="2" placeholder="Informações adicionais..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="AdminPanel.closeModal('modalLink')">Cancelar</button>
+                <button class="btn-primary" id="btnSalvarLink">
+                    <i class="fas fa-save"></i>
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmação -->
+    <div class="modal" id="modalConfirm">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Confirmar Ação</h2>
+                <button class="modal-close" onclick="AdminPanel.closeModal('modalConfirm')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Tem certeza que deseja realizar esta ação?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="AdminPanel.closeModal('modalConfirm')">Cancelar</button>
+                <button class="btn-danger" id="btnConfirmAction">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 RS Contabilidade - Sistema desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
+                <p class="footer-contact">
+                    <a href="mailto:kogakleinscleins@gmail.com"><i class="fas fa-envelope"></i> kogakleinscleins@gmail.com</a>
+                    <a href="tel:+5548991850299"><i class="fas fa-phone"></i> (48) 99185-0299</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

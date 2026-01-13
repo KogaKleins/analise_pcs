@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | RS Contabilidade - Análise de Equipamentos</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-body">
+    <!-- Partículas de fundo -->
+    <div class="particles-container" id="particles"></div>
+    
+    <!-- Container principal -->
+    <div class="auth-container">
+        <!-- Logo e título -->
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="fas fa-desktop"></i>
+                <div class="logo-pulse"></div>
+            </div>
+            <h1 class="auth-title">RS Contabilidade</h1>
+            <p class="auth-subtitle">Sistema de Análise de Equipamentos</p>
+        </div>
+
+        <!-- Formulário de login -->
+        <form class="auth-form" id="loginForm">
+            <div class="form-group">
+                <label for="username">
+                    <i class="fas fa-user"></i>
+                    Usuário
+                </label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="Digite seu usuário"
+                    autocomplete="username"
+                    required
+                >
+                <span class="input-focus-effect"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i>
+                    Senha
+                </label>
+                <div class="password-wrapper">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Digite sua senha"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button type="button" class="toggle-password" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <span class="input-focus-effect"></span>
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" id="rememberMe">
+                    <span class="checkmark"></span>
+                    Lembrar de mim
+                </label>
+            </div>
+
+            <button type="submit" class="btn-login" id="btnLogin">
+                <span class="btn-text">Entrar</span>
+                <span class="btn-loader">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+                <span class="btn-success">
+                    <i class="fas fa-check"></i>
+                </span>
+            </button>
+
+            <!-- Mensagem de erro -->
+            <div class="auth-error" id="authError">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorMessage">Usuário ou senha incorretos</span>
+            </div>
+        </form>
+
+        <!-- Footer do login -->
+        <div class="auth-footer">
+            <p class="security-note">
+                <i class="fas fa-shield-alt"></i>
+                Conexão segura
+            </p>
+            <p class="developer-credit">
+                Desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- Decoração -->
+    <div class="auth-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+    </div>
+
+    <script src="js/particles.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
