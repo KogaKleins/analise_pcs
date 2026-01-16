@@ -1,49 +1,13 @@
 /* ===================================
    RS CONTABILIDADE - ESTILOS PRINCIPAIS
-   Tema: Vermelho Bordô + Glassmorphism
+   Sistema de Temas Dinâmico
+   Padrão: Azul Glass | RS: Vermelho Bordô
    =================================== */
 
-/* CSS Variables */
-:root {
-    /* Cores principais - Bordô */
-    --primary: #8B0000;
-    --primary-dark: #5C0000;
-    --primary-light: #B22222;
-    --primary-gradient: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);
-    
-    /* Cores secundárias */
-    --secondary: #2D2D2D;
-    --secondary-light: #404040;
-    
-    /* Cores de status */
-    --success: #28a745;
-    --warning: #ffc107;
-    --danger: #dc3545;
-    --info: #17a2b8;
-    
-    /* Cores de texto */
-    --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.8);
-    --text-muted: rgba(255, 255, 255, 0.6);
-    
-    /* Backgrounds */
-    --bg-dark: #1a1a1a;
-    --bg-darker: #0d0d0d;
-    --bg-card: rgba(139, 0, 0, 0.1);
-    
-    /* Glassmorphism */
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    --glass-blur: blur(10px);
-    
-    /* Outros */
-    --border-radius: 16px;
-    --border-radius-sm: 8px;
-    --border-radius-lg: 24px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --shadow-lg: 0 20px 60px rgba(139, 0, 0, 0.3);
-}
+/* 
+   NOTA: As variáveis de tema estão em themes.css
+   Este arquivo contém apenas os estilos estruturais
+*/
 
 /* Reset e Base */
 * {
@@ -63,9 +27,51 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
+    position: relative;
 }
 
-/* Background com gradiente */
+/* Background Image Layer - Desfocado */
+.bg-image-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    overflow: hidden;
+}
+
+.bg-image-layer::before {
+    content: '';
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    background-image: url('../imagens/imagem.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(var(--bg-image-blur, 30px)) brightness(0.3) saturate(1.2);
+    transform: scale(1.1);
+    opacity: var(--bg-image-opacity, 0.15);
+}
+
+/* Overlay gradiente sobre a imagem */
+.bg-image-layer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(180deg, var(--bg-darker) 0%, transparent 30%, transparent 70%, var(--bg-darker) 100%),
+        linear-gradient(90deg, var(--bg-darker) 0%, transparent 20%, transparent 80%, var(--bg-darker) 100%);
+    opacity: 0.8;
+}
+
+/* Background com gradiente temático */
 body::before {
     content: '';
     position: fixed;
@@ -73,11 +79,9 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(ellipse at top left, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
-        var(--bg-darker);
+    background: var(--bg-gradient-main);
     z-index: -2;
+    pointer-events: none;
 }
 
 /* Container */
@@ -97,6 +101,29 @@ body::before {
     pointer-events: none;
     z-index: -1;
     overflow: hidden;
+}
+
+/* Efeito de luz ambiente */
+.ambient-light {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(var(--primary-rgb), 0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(60px);
+    transition: var(--transition-slow);
+}
+
+.ambient-light.top-left {
+    top: -200px;
+    left: -200px;
+}
+
+.ambient-light.bottom-right {
+    bottom: -200px;
+    right: -200px;
 }
 
 /* ===================================
@@ -147,7 +174,13 @@ body::before {
     justify-content: center;
     font-size: 24px;
     color: white;
-    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
+    box-shadow: var(--glow-primary);
+    transition: var(--transition);
+}
+
+.logo-icon:hover {
+    transform: scale(1.05);
+    box-shadow: var(--glow-primary), 0 8px 25px rgba(var(--primary-rgb), 0.4);
 }
 
 .logo-icon.small {
@@ -200,7 +233,7 @@ body::before {
 .nav-link.active {
     color: white;
     background: var(--primary-gradient);
-    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
+    box-shadow: var(--glow-primary);
 }
 
 .nav-link i {
@@ -377,7 +410,7 @@ body::before {
     background: var(--primary-gradient);
     color: white;
     border-color: transparent;
-    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
+    box-shadow: var(--glow-primary);
 }
 
 .search-group {
@@ -414,7 +447,7 @@ body::before {
 .search-group input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.2);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
 }
 
 /* ===================================

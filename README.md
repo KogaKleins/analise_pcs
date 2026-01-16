@@ -1,10 +1,28 @@
-# RS Contabilidade - Sistema de Análise de Equipamentos
+# Sistema de Análise de Equipamentos
 
-Sistema web profissional para gerenciamento e análise de computadores da RS Contabilidade.
+Sistema web profissional para gerenciamento e análise de computadores com **Sistema de Temas Dinâmico**.
 
 **Desenvolvido por:** Wilmar Izequiel Kleinschmidt  
 **Email:** kogakleinscleins@gmail.com  
 **Telefone:** (48) 99185-0299
+
+---
+
+## 🎨 Sistema de Temas
+
+O sistema possui dois temas visuais:
+
+### 🔵 Tema Padrão - Azul Glass (Moderno)
+- Cores: Azul profissional (#2563EB) com detalhes em ciano
+- Visual: Glassmorphism moderno e clean
+- Usado por: Admin e usuários gerais
+
+### 🔴 Tema RS Contabilidade - Vermelho Bordô
+- Cores: Vermelho bordô (#8B0000) com detalhes dourados
+- Visual: Elegante e corporativo
+- Usado por: Usuários "RS contabilidade"
+
+**O tema é aplicado automaticamente baseado no usuário logado!**
 
 ---
 
@@ -44,11 +62,12 @@ Sistema web profissional para gerenciamento e análise de computadores da RS Con
 
 ## 🎨 Design
 
-- Tema vermelho bordô profissional
+- **Sistema de Temas Dinâmico** (Azul padrão, Vermelho para RS)
+- **Imagem de fundo desfocada** para efeito premium
 - Efeitos Glassmorphism modernos
-- Animações suaves
+- Animações suaves e partículas temáticas
 - 100% responsivo (mobile-first)
-- Partículas decorativas no fundo
+- Luzes ambiente dinâmicas
 
 ## 📁 Estrutura do Projeto
 
@@ -59,21 +78,26 @@ analise_PCs/
 ├── vercel.json             # Config para deploy
 ├── README.md               # Documentação
 ├── css/
+│   ├── themes.css         # 🆕 Sistema de temas (variáveis)
 │   ├── main.css           # Estilos principais
 │   ├── components.css     # Cards, modal, botões
 │   ├── animations.css     # Animações e efeitos
 │   ├── auth.css           # Estilos de autenticação
 │   ├── admin.css          # Estilos do painel admin
+│   ├── interactions.css   # Microinterações
 │   └── pages.css          # Estilos das páginas internas
 ├── js/
+│   ├── theme.js           # 🆕 Gerenciador de temas
 │   ├── auth.js            # Sistema de autenticação
-│   ├── storage.js         # Gerenciamento de dados (localStorage/JSON)
+│   ├── storage.js         # Gerenciamento de dados
 │   ├── admin.js           # Lógica do painel admin
 │   ├── app.js             # Lógica principal
 │   ├── utils.js           # Funções utilitárias
 │   ├── components.js      # Componentes reutilizáveis
 │   ├── interactions.js    # Microinterações
-│   └── particles.js       # Sistema de partículas
+│   └── particles.js       # Sistema de partículas temáticas
+├── imagens/
+│   └── imagem.jpg         # Imagem de fundo (desfocada)
 └── pages/
     ├── admin.html         # Painel administrativo
     ├── relatorios.html    # Página de relatórios

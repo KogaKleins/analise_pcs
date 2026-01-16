@@ -152,6 +152,11 @@ class AuthSystem {
             timestamp: Date.now()
         };
         localStorage.setItem('rs_session', JSON.stringify(sessionData));
+        
+        // Aplicar tema do usuário
+        if (typeof setThemeForUser === 'function') {
+            setThemeForUser(user.username);
+        }
     }
 
     redirectToDashboard(role) {

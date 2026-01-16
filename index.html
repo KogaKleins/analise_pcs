@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RS Contabilidade - Análise de Computadores</title>
+    <title>Sistema de Análise - Gerenciamento de Computadores</title>
+    <!-- Sistema de Temas -->
+    <link rel="stylesheet" href="css/themes.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/animations.css">
@@ -14,9 +16,12 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
     <!-- Meta tags -->
     <meta name="description" content="Análise técnica de computadores da RS Contabilidade">
-    <meta name="theme-color" content="#8B0000">
+    <meta name="theme-color" content="#2563EB">
 </head>
 <body>
+    <!-- Background Image Layer -->
+    <div class="bg-image-layer"></div>
+    
     <!-- Partículas de fundo -->
     <div class="particles" id="particles"></div>
     
@@ -25,11 +30,11 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">
-                    <i class="fas fa-calculator"></i>
+                    <i class="fas fa-desktop"></i>
                 </div>
                 <div class="logo-text">
-                    <h1>RS CONTABILIDADE</h1>
-                    <span>Análise de Equipamentos</span>
+                    <h1 id="brandName">SISTEMA DE ANÁLISE</h1>
+                    <span>Gerenciamento de Equipamentos</span>
                 </div>
             </div>
             <nav class="nav-menu">
@@ -238,6 +243,7 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="js/theme.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/utils.js"></script>

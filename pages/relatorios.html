@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatórios - RS Contabilidade</title>
+    <title>Relatórios - Sistema de Análise</title>
+    <!-- Sistema de Temas -->
+    <link rel="stylesheet" href="../css/themes.css">
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/pages.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="theme-color" content="#2563EB">
 </head>
 <body>
+    <!-- Background Image Layer -->
+    <div class="bg-image-layer"></div>
+    
     <!-- Partículas de fundo -->
     <div class="particles" id="particles"></div>
     
@@ -20,11 +26,11 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">
-                    <i class="fas fa-calculator"></i>
+                    <i class="fas fa-desktop"></i>
                 </div>
                 <div class="logo-text">
-                    <h1>RS CONTABILIDADE</h1>
-                    <span>Análise de Equipamentos</span>
+                    <h1 id="brandName">SISTEMA DE ANÁLISE</h1>
+                    <span>Gerenciamento de Equipamentos</span>
                 </div>
             </div>
             <nav class="nav-menu">
@@ -217,6 +223,7 @@
         </div>
     </footer>
 
+    <script src="../js/theme.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/storage.js"></script>
     <script src="../js/particles.js"></script>
