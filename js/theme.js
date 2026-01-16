@@ -200,6 +200,8 @@ class ThemeManager {
         // Criar novo indicador
         const indicator = document.createElement('div');
         indicator.className = 'theme-indicator';
+        indicator.setAttribute('role', 'status');
+        indicator.setAttribute('aria-live', 'polite');
         indicator.innerHTML = `
             <span class="theme-dot"></span>
             <span>Tema: ${theme.name}</span>
@@ -220,7 +222,15 @@ class ThemeManager {
 
     // Monitorar mudanças na sessão
     watchSessionChanges() {
-        // Verificar periodicamente (para detectar login/logout)
+        // Usar MutationObserver para melhor performance (ao invés de setInterval)
+        // Também verificar mudanças no storage
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'rs_session') {
+                this.loadTheme();
+            }
+        });
+        
+        // Fallback com intervalo mais longo para outras mudanças
         setInterval(() => {
             const session = this.getSession();
             const expectedTheme = session && session.username && USER_THEMES[session.username] 
@@ -230,7 +240,7 @@ class ThemeManager {
             if (this.currentTheme !== expectedTheme) {
                 this.loadTheme();
             }
-        }, 1000);
+        }, 2000); // Reduzido para 2 segundos
     }
 
     // Alternar entre temas (para botão de toggle, se necessário)
@@ -265,6 +275,19 @@ class ThemeManager {
             this.setTheme('default');
         }
     }
+    
+    // Destruir instância e limpar recursos
+    destroy() {
+        // Remover elementos criados
+        const bgLayer = document.querySelector('.bg-image-layer');
+        if (bgLayer) bgLayer.remove();
+        
+        const lights = document.querySelectorAll('.ambient-light');
+        lights.forEach(l => l.remove());
+        
+        const indicator = document.querySelector('.theme-indicator');
+        if (indicator) indicator.remove();
+    }
 }
 
 // Instância global do gerenciador de temas
@@ -275,10 +298,18 @@ document.addEventListener('DOMContentLoaded', () => {
     themeManager = new ThemeManager();
 });
 
+// Cleanup ao sair da página
+window.addEventListener('beforeunload', () => {
+    if (themeManager) {
+        themeManager.destroy();
+    }
+});
+
 // Exportar para uso em outros scripts
 if (typeof window !== 'undefined') {
     window.ThemeManager = ThemeManager;
     window.getThemeManager = () => themeManager;
+    window.THEMES_CONFIG = THEMES_CONFIG;
 }
 
 // Função auxiliar para definir tema externamente

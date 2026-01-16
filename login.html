@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Sistema de Análise de Equipamentos</title>
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
     <!-- Sistema de Temas -->
     <link rel="stylesheet" href="css/themes.css">
     <link rel="stylesheet" href="css/main.css">
@@ -11,18 +16,23 @@
     <link rel="stylesheet" href="css/animations.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Meta tags -->
     <meta name="theme-color" content="#2563EB">
+    <meta name="description" content="Acesso ao Sistema de Análise de Equipamentos">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
 </head>
 <body class="auth-body">
     <!-- Partículas de fundo -->
     <div class="particles-container" id="particles"></div>
     
     <!-- Container principal -->
-    <div class="auth-container">
+    <div class="auth-container" role="main">
         <!-- Logo e título -->
         <div class="auth-header">
-            <div class="auth-logo">
+            <div class="auth-logo" aria-hidden="true">
                 <i class="fas fa-desktop"></i>
                 <div class="logo-pulse"></div>
             </div>
