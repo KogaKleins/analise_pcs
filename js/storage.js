@@ -21,11 +21,11 @@ const DEFAULT_DATA = {
     equipamentos: [],
     links: [],
     config: {
-        empresa: 'RS Contabilidade',
+        empresa: 'Sistema de Análise',
         email: '',
         telefone: '',
         endereco: '',
-        corPrincipal: '#8B0000',
+        corPrincipal: '#2563EB', // Azul como padrão
         desenvolvedor: {
             nome: 'Wilmar Izequiel Kleinschmidt',
             email: 'kogakleinscleins@gmail.com',

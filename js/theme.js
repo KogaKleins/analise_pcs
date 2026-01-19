@@ -148,18 +148,18 @@ class ThemeManager {
         }
     }
 
-    // Atualizar cor do tema no meta tag
+    // Atualizar cor do tema no meta tag - Usa cores do CSS
     updateMetaThemeColor(themeId) {
-        let color = '#2563EB'; // Azul padrão
-        
-        if (themeId === 'rs-contabilidade') {
-            color = '#8B0000'; // Vermelho bordô
-        }
-        
-        let meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) {
-            meta.setAttribute('content', color);
-        }
+        // Aguardar o tema ser aplicado e então ler a cor do CSS
+        requestAnimationFrame(() => {
+            const style = getComputedStyle(document.documentElement);
+            const color = style.getPropertyValue('--primary').trim() || '#2563EB';
+            
+            let meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) {
+                meta.setAttribute('content', color);
+            }
+        });
     }
 
     // Criar elementos de background

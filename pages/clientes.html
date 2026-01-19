@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Sistema de Análise</title>
+    
+    <!-- Preconnect para recursos externos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Sistema de Temas (Critical CSS) -->
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/interactions.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
+    
+    <!-- Meta tags SEO -->
+    <meta name="description" content="Gerenciamento de clientes - Sistema de Análise de Equipamentos">
+    <meta name="theme-color" content="#2563EB">
+    
+    <style>
+        /* Estilos específicos da página de clientes */
+        .clients-hero {
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+        
+        .clients-hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .clients-hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            padding: 40px 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .client-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .client-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        
+        .client-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--glow-card);
+        }
+        
+        .client-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .client-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .client-logo {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-gradient);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: var(--glow-primary);
+        }
+        
+        .client-logo.rs-theme {
+            background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);
+            box-shadow: 0 0 40px rgba(139, 0, 0, 0.4);
+        }
+        
+        .client-info h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .client-info span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .client-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .client-stat {
+            text-align: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius-sm);
+        }
+        
+        .client-stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            display: block;
+        }
+        
+        .client-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .client-actions {
+            display: flex;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .client-actions .btn {
+            flex: 1;
+        }
+        
+        /* Card de adicionar cliente */
+        .add-client-card {
+            background: transparent;
+            border: 2px dashed var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .add-client-card:hover {
+            border-color: var(--primary);
+            background: var(--glass-bg);
+            transform: translateY(-4px);
+        }
+        
+        .add-client-card i {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            transition: var(--transition);
+        }
+        
+        .add-client-card:hover i {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .add-client-card span {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+        
+        /* Estado vazio */
+        .empty-clients {
+            text-align: center;
+            padding: 80px 24px;
+        }
+        
+        .empty-clients i {
+            font-size: 80px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        
+        .empty-clients h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .empty-clients p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        
+        /* Breadcrumb de cliente selecionado */
+        .client-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+        }
+        
+        .client-breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .client-breadcrumb a:hover {
+            color: var(--primary);
+        }
+        
+        .client-breadcrumb .current {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .client-breadcrumb i.separator {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        /* Modal de novo cliente */
+        .modal-client .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .modal-client label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .modal-client input,
+        .modal-client select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-sm);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .modal-client input:focus,
+        .modal-client select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--focus-ring);
+        }
+        
+        .color-picker-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .color-picker-group input[type="color"] {
+            width: 60px;
+            height: 40px;
+            padding: 2px;
+            cursor: pointer;
+        }
+        
+        .color-preview {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-sm);
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link para Acessibilidade -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+    
+    <!-- Background Image Layer -->
+    <div class="bg-image-layer"></div>
+    
+    <!-- Partículas de fundo -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="logo-text">
+                    <h1 id="brandName">SISTEMA DE ANÁLISE</h1>
+                    <span>Gerenciamento de Clientes</span>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+                <a href="clientes.html" class="nav-link active">
+                    <i class="fas fa-building"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="relatorios.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Relatórios</span>
+                </a>
+                <!-- Link Admin (visível apenas para admin) -->
+                <a href="admin.html" class="nav-link admin-only" id="adminLink" style="display: none;">
+                    <i class="fas fa-cogs"></i>
+                    <span>Admin</span>
+                </a>
+            </nav>
+            <!-- User Menu -->
+            <div class="user-menu">
+                <div class="user-info" id="userInfo">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userNameDisplay">Usuário</span>
+                </div>
+                <button class="btn-logout" id="btnLogout" title="Sair">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="clients-hero">
+            <h2><i class="fas fa-building"></i> Seus Clientes</h2>
+            <p>Selecione um cliente para visualizar seus equipamentos, sugestões e relatórios</p>
+        </section>
+        
+        <!-- Grid de Clientes -->
+        <section class="clients-grid" id="clientsGrid">
+            <!-- Cards serão renderizados via JavaScript -->
+        </section>
+    </main>
+
+    <!-- Modal: Novo Cliente -->
+    <div class="modal modal-client" id="modalNovoCliente">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus-circle"></i> Novo Cliente</h2>
+                <button class="modal-close" onclick="closeModal('modalNovoCliente')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formNovoCliente">
+                    <div class="form-group">
+                        <label for="clienteNome">Nome do Cliente *</label>
+                        <input type="text" id="clienteNome" placeholder="Ex: Empresa ABC Ltda" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="clienteEmail">Email</label>
+                        <input type="email" id="clienteEmail" placeholder="contato@empresa.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="clienteTelefone">Telefone</label>
+                        <input type="tel" id="clienteTelefone" placeholder="(00) 00000-0000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="clienteCor">Cor do Tema</label>
+                        <div class="color-picker-group">
+                            <input type="color" id="clienteCor" value="#2563EB">
+                            <span class="color-preview" id="corPreview">#2563EB</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('modalNovoCliente')">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary" form="formNovoCliente">
+                    <i class="fas fa-plus"></i> Criar Cliente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Sistema de Análise de Equipamentos</p>
+            <p>Desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/clients.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/particles.js"></script>
+    <script src="../js/interactions.js"></script>
+    
+    <script>
+        // ===================================
+        // PÁGINA DE CLIENTES
+        // ===================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initClientsPage();
+        });
+        
+        function initClientsPage() {
+            // Verificar autenticação
+            if (!checkAuth()) return;
+            
+            // Setup UI
+            setupUserInterface();
+            
+            // Renderizar clientes
+            renderClients();
+            
+            // Event listeners
+            setupEventListeners();
+        }
+        
+        function checkAuth() {
+            if (typeof Auth !== 'undefined' && !Auth.isAuthenticated()) {
+                window.location.href = '../login.html';
+                return false;
+            }
+            return true;
+        }
+        
+        function setupUserInterface() {
+            // Obter sessão
+            let session = null;
+            if (typeof Auth !== 'undefined') {
+                session = Auth.getSession();
+            }
+            
+            if (!session) return;
+            
+            // Atualizar nome do usuário
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            if (userNameDisplay) {
+                userNameDisplay.textContent = session.name;
+            }
+            
+            // Mostrar elementos admin
+            if (session.role === 'admin') {
+                document.querySelectorAll('.admin-only').forEach(el => {
+                    el.style.display = '';
+                });
+                
+                const adminLink = document.getElementById('adminLink');
+                if (adminLink) adminLink.style.display = 'flex';
+            }
+            
+            // Botão de logout
+            const btnLogout = document.getElementById('btnLogout');
+            if (btnLogout) {
+                btnLogout.addEventListener('click', () => {
+                    if (typeof Auth !== 'undefined') {
+                        Auth.logout();
+                    }
+                });
+            }
+        }
+        
+        function renderClients() {
+            const grid = document.getElementById('clientsGrid');
+            if (!grid) return;
+            
+            const clients = Clients.getAll();
+            const session = typeof Auth !== 'undefined' ? Auth.getSession() : null;
+            const isAdmin = session?.role === 'admin';
+            
+            if (clients.length === 0 && !isAdmin) {
+                grid.innerHTML = `
+                    <div class="empty-clients">
+                        <i class="fas fa-building"></i>
+                        <h3>Nenhum cliente cadastrado</h3>
+                        <p>Entre em contato com o administrador para cadastrar clientes.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            // Renderizar cards de clientes
+            clients.forEach(client => {
+                const stats = Clients.getStats(client.id);
+                const isRS = client.tema === 'rs-contabilidade';
+                
+                html += `
+                    <div class="client-card" data-client-id="${client.id}" onclick="selectClient('${client.id}')">
+                        <div class="client-card-header">
+                            <div class="client-logo ${isRS ? 'rs-theme' : ''}" style="${!isRS && client.corPrimaria ? 'background: ' + client.corPrimaria : ''}">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="client-info">
+                                <h3>${client.nome}</h3>
+                                <span><i class="fas fa-envelope"></i> ${client.email || 'Não informado'}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="client-stats">
+                            <div class="client-stat">
+                                <span class="client-stat-number">${stats.total}</span>
+                                <span class="client-stat-label">Equipamentos</span>
+                            </div>
+                            <div class="client-stat">
+                                <span class="client-stat-number" style="color: var(--success)">${stats.bom}</span>
+                                <span class="client-stat-label">OK</span>
+                            </div>
+                            <div class="client-stat">
+                                <span class="client-stat-number" style="color: var(--danger)">${stats.critico + stats.atencao}</span>
+                                <span class="client-stat-label">Atenção</span>
+                            </div>
+                        </div>
+                        
+                        <div class="client-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); selectClient('${client.id}')">
+                                <i class="fas fa-desktop"></i> Ver Equipamentos
+                            </button>
+                            ${isAdmin ? `
+                                <button class="btn btn-secondary" onclick="event.stopPropagation(); editClient('${client.id}')" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Card de adicionar novo cliente (apenas admin)
+            if (isAdmin) {
+                html += `
+                    <div class="client-card add-client-card" onclick="openModal('modalNovoCliente')">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Adicionar Novo Cliente</span>
+                    </div>
+                `;
+            }
+            
+            grid.innerHTML = html;
+        }
+        
+        function selectClient(clientId) {
+            // Definir cliente atual
+            const client = Clients.setCurrent(clientId);
+            
+            if (client) {
+                // Redirecionar para página principal com equipamentos do cliente
+                window.location.href = '../index.html';
+            }
+        }
+        
+        function editClient(clientId) {
+            const client = Clients.getById(clientId);
+            if (!client) return;
+            
+            // Preencher formulário
+            document.getElementById('clienteNome').value = client.nome;
+            document.getElementById('clienteEmail').value = client.email || '';
+            document.getElementById('clienteTelefone').value = client.telefone || '';
+            document.getElementById('clienteCor').value = client.corPrimaria || '#2563EB';
+            document.getElementById('corPreview').textContent = client.corPrimaria || '#2563EB';
+            
+            // Marcar como edição
+            document.getElementById('formNovoCliente').dataset.editId = clientId;
+            
+            // Atualizar título do modal
+            document.querySelector('#modalNovoCliente .modal-header h2').innerHTML = 
+                '<i class="fas fa-edit"></i> Editar Cliente';
+            
+            openModal('modalNovoCliente');
+        }
+        
+        function setupEventListeners() {
+            // Color picker
+            const colorPicker = document.getElementById('clienteCor');
+            const colorPreview = document.getElementById('corPreview');
+            
+            if (colorPicker && colorPreview) {
+                colorPicker.addEventListener('input', (e) => {
+                    colorPreview.textContent = e.target.value.toUpperCase();
+                });
+            }
+            
+            // Formulário de novo cliente
+            const form = document.getElementById('formNovoCliente');
+            if (form) {
+                form.addEventListener('submit', handleClientSubmit);
+            }
+        }
+        
+        function handleClientSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const editId = form.dataset.editId;
+            
+            const clientData = {
+                nome: document.getElementById('clienteNome').value.trim(),
+                email: document.getElementById('clienteEmail').value.trim(),
+                telefone: document.getElementById('clienteTelefone').value.trim(),
+                corPrimaria: document.getElementById('clienteCor').value
+            };
+            
+            if (!clientData.nome) {
+                showToast('Nome do cliente é obrigatório', 'error');
+                return;
+            }
+            
+            try {
+                if (editId) {
+                    // Atualizar cliente existente
+                    Clients.update(editId, clientData);
+                    showToast('Cliente atualizado com sucesso!', 'success');
+                } else {
+                    // Criar novo cliente
+                    Clients.add(clientData);
+                    showToast('Cliente criado com sucesso!', 'success');
+                }
+                
+                // Limpar formulário
+                form.reset();
+                delete form.dataset.editId;
+                
+                // Fechar modal e re-renderizar
+                closeModal('modalNovoCliente');
+                renderClients();
+                
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+        
+        // ===================================
+        // FUNÇÕES AUXILIARES
+        // ===================================
+        
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                
+                // Resetar título se for modal de cliente
+                if (modalId === 'modalNovoCliente') {
+                    document.querySelector('#modalNovoCliente .modal-header h2').innerHTML = 
+                        '<i class="fas fa-plus-circle"></i> Novo Cliente';
+                    document.getElementById('formNovoCliente').reset();
+                    delete document.getElementById('formNovoCliente').dataset.editId;
+                }
+            }
+        }
+        
+        function showToast(message, type = 'info') {
+            if (typeof Interactions !== 'undefined' && Interactions.showToast) {
+                Interactions.showToast(message, type);
+            } else {
+                alert(message);
+            }
+        }
+        
+        // Fechar modal ao clicar no overlay
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                const modal = e.target.closest('.modal');
+                if (modal) {
+                    closeModal(modal.id);
+                }
+            }
+        });
+        
+        // Fechar modal com ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const activeModal = document.querySelector('.modal.active');
+                if (activeModal) {
+                    closeModal(activeModal.id);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

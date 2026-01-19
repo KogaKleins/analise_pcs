@@ -240,14 +240,15 @@
     }
 }
 
+/* Animated gradient text - Usa variáveis do tema */
 .animated-gradient-text {
     background: linear-gradient(
         90deg,
-        #8B0000,
-        #B22222,
-        #DC143C,
-        #B22222,
-        #8B0000
+        var(--primary),
+        var(--primary-light),
+        var(--accent),
+        var(--primary-light),
+        var(--primary)
     );
     background-size: 300% 100%;
     -webkit-background-clip: text;
@@ -256,13 +257,13 @@
     animation: gradientText 4s ease infinite;
 }
 
-/* Border glow */
+/* Border glow - Usa variáveis do tema */
 @keyframes borderGlow {
     0%, 100% {
-        border-color: rgba(139, 0, 0, 0.3);
+        border-color: rgba(var(--primary-rgb), 0.3);
     }
     50% {
-        border-color: rgba(139, 0, 0, 0.8);
+        border-color: rgba(var(--primary-rgb), 0.8);
     }
 }
 
@@ -303,19 +304,19 @@
     display: inline-block;
 }
 
-/* Notification badge pulse */
+/* Notification badge pulse - Usa variáveis do tema */
 @keyframes badgePulse {
     0% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(139, 0, 0, 0.7);
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.7);
     }
     70% {
         transform: scale(1.1);
-        box-shadow: 0 0 0 10px rgba(139, 0, 0, 0);
+        box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
     }
     100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(139, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
     }
 }
 

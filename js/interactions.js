@@ -345,9 +345,16 @@ const Interactions = {
         }, { once: true });
     },
 
-    // Efeito de confetti para sucesso
+    // Efeito de confetti para sucesso - Usa cores dinâmicas do tema
     confetti(x, y) {
-        const colors = ['#8B0000', '#B22222', '#DC143C', '#FFD700', '#FFA500'];
+        // Obter cores do tema atual
+        const style = getComputedStyle(document.documentElement);
+        const primary = style.getPropertyValue('--primary').trim() || '#2563EB';
+        const primaryLight = style.getPropertyValue('--primary-light').trim() || '#3B82F6';
+        const accent = style.getPropertyValue('--accent').trim() || '#06B6D4';
+        const accentLight = style.getPropertyValue('--accent-light').trim() || '#22D3EE';
+        
+        const colors = [primary, primaryLight, accent, accentLight, '#FFD700'];
         const particleCount = 30;
 
         for (let i = 0; i < particleCount; i++) {

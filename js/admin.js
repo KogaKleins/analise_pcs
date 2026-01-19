@@ -467,7 +467,7 @@ const AdminPanel = {
         document.getElementById('configEmail').value = config.email || '';
         document.getElementById('configTelefone').value = config.telefone || '';
         document.getElementById('configEndereco').value = config.endereco || '';
-        document.getElementById('configCor').value = config.corPrincipal || '#8B0000';
+        document.getElementById('configCor').value = config.corPrincipal || '#2563EB';
     },
 
     /**

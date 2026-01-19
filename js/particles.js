@@ -1,33 +1,29 @@
 /* ===================================
    SISTEMA DE PARTÍCULAS DINÂMICO
-   Adapta-se ao tema atual
+   Adapta-se ao tema atual via CSS Variables
    =================================== */
 
-// Configuração de cores por tema
-const PARTICLE_THEMES = {
-    default: {
-        colors: ['#2563EB', '#3B82F6', '#06B6D4', '#22D3EE', '#60A5FA'],
-        glowIntensity: 1.5
-    },
-    'rs-contabilidade': {
-        colors: ['#8B0000', '#B22222', '#DC143C', '#FF6B6B', '#D4A373'],
-        glowIntensity: 1.8
-    }
-};
+// Função para obter cores do tema atual via CSS
+function getThemeColors() {
+    const style = getComputedStyle(document.documentElement);
+    const primary = style.getPropertyValue('--primary').trim() || '#2563EB';
+    const primaryLight = style.getPropertyValue('--primary-light').trim() || '#3B82F6';
+    const accent = style.getPropertyValue('--accent').trim() || '#06B6D4';
+    const accentLight = style.getPropertyValue('--accent-light').trim() || '#22D3EE';
+    
+    return [primary, primaryLight, accent, accentLight, primaryLight];
+}
 
 class ParticleSystem {
     constructor(containerId, options = {}) {
         this.container = document.getElementById(containerId);
         if (!this.container) return;
         
-        // Determinar tema atual
-        const currentTheme = this.getCurrentTheme();
-        const themeColors = PARTICLE_THEMES[currentTheme] || PARTICLE_THEMES.default;
-        
+        // Usar cores dinâmicas do CSS
         this.options = {
             particleCount: options.particleCount || 30,
-            colors: themeColors.colors,
-            glowIntensity: themeColors.glowIntensity,
+            colors: getThemeColors(),
+            glowIntensity: 1.5,
             minSize: options.minSize || 2,
             maxSize: options.maxSize || 6,
             minDuration: options.minDuration || 15,
@@ -42,17 +38,10 @@ class ParticleSystem {
         this.listenThemeChanges();
     }
     
-    getCurrentTheme() {
-        const html = document.documentElement;
-        return html.getAttribute('data-theme') || 'default';
-    }
-    
     listenThemeChanges() {
-        window.addEventListener('themeChanged', (e) => {
-            const themeId = e.detail.themeId;
-            const themeColors = PARTICLE_THEMES[themeId] || PARTICLE_THEMES.default;
-            this.options.colors = themeColors.colors;
-            this.options.glowIntensity = themeColors.glowIntensity;
+        window.addEventListener('themeChanged', () => {
+            // Atualizar cores do tema
+            this.options.colors = getThemeColors();
             
             // Atualizar cores das partículas existentes
             this.updateParticleColors();

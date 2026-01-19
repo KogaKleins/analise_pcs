@@ -38,6 +38,10 @@
                     <i class="fas fa-home"></i>
                     <span>Início</span>
                 </a>
+                <a href="clientes.html" class="nav-link">
+                    <i class="fas fa-building"></i>
+                    <span>Clientes</span>
+                </a>
                 <a href="relatorios.html" class="nav-link active">
                     <i class="fas fa-file-alt"></i>
                     <span>Relatórios</span>
@@ -226,6 +230,7 @@
     <script src="../js/theme.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/storage.js"></script>
+    <script src="../js/clients.js"></script>
     <script src="../js/particles.js"></script>
     <script>
         // Verificar autenticação
@@ -258,10 +263,25 @@
             }
         });
 
-        // Render individual reports from Storage
+        // Render individual reports from Storage (com suporte a clientes)
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('individualReports');
-            const equipamentos = Storage.getEquipamentos();
+            
+            // Obter equipamentos (do cliente atual ou global)
+            let equipamentos = [];
+            if (typeof Clients !== 'undefined') {
+                const currentClient = Clients.getCurrent();
+                if (currentClient) {
+                    equipamentos = Clients.getEquipamentos(currentClient.id);
+                    // Atualizar branding
+                    const brandName = document.getElementById('brandName');
+                    if (brandName) brandName.textContent = currentClient.nome.toUpperCase();
+                } else {
+                    equipamentos = Storage.getEquipamentos();
+                }
+            } else {
+                equipamentos = Storage.getEquipamentos();
+            }
             
             if (container) {
                 if (equipamentos.length === 0) {

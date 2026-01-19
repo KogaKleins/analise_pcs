@@ -22,6 +22,9 @@ async function initializeApp() {
 
         // Configurar UI baseado na role
         setupUserInterface();
+        
+        // Verificar se há cliente selecionado
+        checkAndDisplayClient();
 
         // Mostrar loading
         showLoadingState();
@@ -43,7 +46,11 @@ async function initializeApp() {
         setTimeout(() => {
             const session = Auth.getSession();
             if (session && window.Interactions) {
-                Interactions.showToast(`Bem-vindo, ${session.name}!`, 'success', 3000);
+                const currentClient = typeof Clients !== 'undefined' ? Clients.getCurrent() : null;
+                const welcomeMsg = currentClient 
+                    ? `Visualizando: ${currentClient.nome}` 
+                    : `Bem-vindo, ${session.name}!`;
+                Interactions.showToast(welcomeMsg, 'success', 3000);
             }
         }, 500);
 
@@ -149,14 +156,62 @@ function showErrorState() {
 }
 
 // ===================================
-// DADOS DO STORAGE
+// DADOS DO STORAGE (COM SUPORTE A CLIENTES)
 // ===================================
 function getEquipamentos() {
+    // Se há cliente selecionado, usa dados do cliente
+    if (typeof Clients !== 'undefined') {
+        const currentClient = Clients.getCurrent();
+        if (currentClient) {
+            return Clients.getEquipamentos(currentClient.id);
+        }
+    }
+    // Fallback para storage global (compatibilidade)
     return Storage.getEquipamentos();
 }
 
 function getLinks() {
+    // Se há cliente selecionado, usa dados do cliente
+    if (typeof Clients !== 'undefined') {
+        const currentClient = Clients.getCurrent();
+        if (currentClient) {
+            return Clients.getSugestoes(currentClient.id);
+        }
+    }
     return Storage.getLinks();
+}
+
+// Verifica se tem cliente selecionado e atualiza a interface
+function checkAndDisplayClient() {
+    if (typeof Clients !== 'undefined') {
+        const currentClient = Clients.getCurrent();
+        if (currentClient) {
+            // Atualizar título
+            const heroTitle = document.querySelector('.hero h2');
+            if (heroTitle) {
+                heroTitle.innerHTML = `Equipamentos de <span class="highlight">${currentClient.nome}</span>`;
+            }
+            
+            // Atualizar branding
+            const brandName = document.getElementById('brandName');
+            if (brandName) {
+                brandName.textContent = currentClient.nome.toUpperCase();
+            }
+            
+            const footerBrand = document.getElementById('footerBrand');
+            if (footerBrand) {
+                footerBrand.textContent = currentClient.nome.toUpperCase();
+            }
+            
+            // Aplicar tema do cliente
+            if (typeof setAppTheme === 'function' && currentClient.tema) {
+                setAppTheme(currentClient.tema);
+            }
+            
+            return true;
+        }
+    }
+    return false;
 }
 
 // ===================================
