@@ -268,11 +268,10 @@
                         <p>PCs que precisam ser substituídos</p>
                     </div>
                 </div>
-                <div class="alert-box">
+                <div class="alert-box" id="alertSubstituicao" style="display: none;">
                     <i class="fas fa-exclamation-circle"></i>
                     <div>
-                        <strong>Atenção:</strong> Os computadores PC-04 e PC-12 estão obsoletos e não valem upgrade. 
-                        Recomenda-se a substituição completa por equipamentos novos.
+                        <strong>Atenção:</strong> <span id="pcsSubstituicaoMsg">Alguns equipamentos estão obsoletos e não valem upgrade.</span>
                     </div>
                 </div>
                 <div class="products-grid">
@@ -334,22 +333,22 @@
                         <p>Valores aproximados para upgrades necessários</p>
                     </div>
                 </div>
-                <div class="budget-summary">
+                <div class="budget-summary" id="budgetSummary">
                     <div class="budget-item">
                         <span class="budget-label">Upgrades de RAM</span>
-                        <span class="budget-value">~R$ 900,00</span>
+                        <span class="budget-value" id="budgetRam">Calculando...</span>
                     </div>
                     <div class="budget-item">
                         <span class="budget-label">Upgrades de SSD</span>
-                        <span class="budget-value">~R$ 800,00</span>
+                        <span class="budget-value" id="budgetSsd">Calculando...</span>
                     </div>
                     <div class="budget-item">
-                        <span class="budget-label">Substituição de PCs (2)</span>
-                        <span class="budget-value">~R$ 5.000,00</span>
+                        <span class="budget-label">Substituição de PCs</span>
+                        <span class="budget-value" id="budgetPcs">Calculando...</span>
                     </div>
                     <div class="budget-item total">
                         <span class="budget-label">Total Estimado</span>
-                        <span class="budget-value">~R$ 6.700,00</span>
+                        <span class="budget-value" id="budgetTotal">Calculando...</span>
                     </div>
                 </div>
                 <p class="budget-note">
@@ -387,7 +386,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 RS Contabilidade. Sistema desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
+                <p>&copy; <span class="current-year">2026</span> RS Contabilidade. Sistema desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
             </div>
         </div>
     </footer>
@@ -429,14 +428,40 @@
 
         // Render priority list from Storage
         document.addEventListener('DOMContentLoaded', () => {
+            // Atualizar ano
+            document.querySelectorAll('.current-year').forEach(el => el.textContent = new Date().getFullYear());
+            
+            // Obter equipamentos (do cliente atual ou global)
+            let equipamentos = [];
+            if (typeof Clients !== 'undefined') {
+                const currentClient = Clients.getCurrent();
+                if (currentClient) {
+                    equipamentos = Clients.getEquipamentos(currentClient.id);
+                    // Atualizar branding
+                    const brandName = document.getElementById('brandName');
+                    if (brandName) brandName.textContent = currentClient.nome.toUpperCase();
+                } else {
+                    equipamentos = Storage.getEquipamentos();
+                }
+            } else {
+                equipamentos = Storage.getEquipamentos();
+            }
+            
             const container = document.getElementById('priorityList');
-            const equipamentos = Storage.getEquipamentos();
             
             if (container) {
                 const priorityPCs = equipamentos.filter(pc => pc.status !== 'bom' && pc.status !== 'ok');
                 
                 if (priorityPCs.length === 0) {
-                    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); padding: 20px; text-align: center;">Nenhum equipamento necessitando atenção no momento.</p>';
+                    container.innerHTML = `
+                        <div class="empty-priority">
+                            <i class="fas fa-check-circle" style="font-size: 48px; color: var(--success); margin-bottom: 16px;"></i>
+                            <p style="color: rgba(255,255,255,0.7); text-align: center;">
+                                Todos os equipamentos estão em bom estado!<br>
+                                <small style="color: rgba(255,255,255,0.5);">Nenhum upgrade necessário no momento.</small>
+                            </p>
+                        </div>
+                    `;
                 } else {
                     container.innerHTML = priorityPCs.map(pc => `
                         <div class="priority-item ${pc.status}">
@@ -453,11 +478,46 @@
                         </div>
                     `).join('');
                 }
+                
+                // Atualizar alerta de substituição
+                const criticosPCs = equipamentos.filter(pc => pc.status === 'critico');
+                const alertBox = document.getElementById('alertSubstituicao');
+                const msgSpan = document.getElementById('pcsSubstituicaoMsg');
+                
+                if (criticosPCs.length > 0 && alertBox && msgSpan) {
+                    alertBox.style.display = 'flex';
+                    const nomes = criticosPCs.map(pc => pc.nome).join(', ');
+                    msgSpan.textContent = `Os equipamentos ${nomes} estão obsoletos e recomenda-se a substituição completa.`;
+                }
             }
+            
+            // Calcular orçamento estimado
+            calcularOrcamento(equipamentos);
             
             // Render links de compra
             renderPurchaseLinks();
         });
+        
+        function calcularOrcamento(equipamentos) {
+            const atencao = equipamentos.filter(pc => pc.status === 'atencao').length;
+            const criticos = equipamentos.filter(pc => pc.status === 'critico').length;
+            
+            // Estimativas baseadas em médias de mercado
+            const custoRam = atencao * 150; // R$150 por upgrade de RAM
+            const custoSsd = atencao * 200; // R$200 por SSD
+            const custoPc = criticos * 2500; // R$2500 por PC novo básico
+            const total = custoRam + custoSsd + custoPc;
+            
+            const formatCurrency = (value) => {
+                if (value === 0) return 'R$ 0,00';
+                return `~R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            };
+            
+            document.getElementById('budgetRam').textContent = formatCurrency(custoRam);
+            document.getElementById('budgetSsd').textContent = formatCurrency(custoSsd);
+            document.getElementById('budgetPcs').textContent = formatCurrency(custoPc);
+            document.getElementById('budgetTotal').textContent = formatCurrency(total);
+        }
         
         function renderPurchaseLinks() {
             const links = Storage.getLinks();

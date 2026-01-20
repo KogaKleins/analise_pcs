@@ -26,9 +26,14 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(40px) brightness(0.25) saturate(1.3);
+    filter: blur(8px) brightness(0.4) saturate(1.2);
     transform: scale(1.1);
     z-index: 0;
+}
+
+/* Fallback caso a imagem não carregue */
+.auth-body::before {
+    background-color: var(--bg-darker);
 }
 
 /* Overlay gradiente temático */

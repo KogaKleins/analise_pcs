@@ -441,7 +441,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2024 RS Contabilidade - Sistema desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
+                <p>&copy; <span class="current-year">2026</span> RS Contabilidade - Sistema desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
                 <p class="footer-contact">
                     <a href="mailto:kogakleinscleins@gmail.com"><i class="fas fa-envelope"></i> kogakleinscleins@gmail.com</a>
                     <a href="tel:+5548991850299"><i class="fas fa-phone"></i> (48) 99185-0299</a>
@@ -449,6 +449,7 @@
             </div>
         </div>
     </footer>
+    <script>document.querySelectorAll('.current-year').forEach(el => el.textContent = new Date().getFullYear());</script>
 
     <script src="../js/theme.js"></script>
     <script src="../js/auth.js"></script>

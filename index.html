@@ -2,13 +2,18 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Sistema de Análise - Gerenciamento de Computadores</title>
     
     <!-- Preconnect para recursos externos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="css/themes.css" as="style">
+    <link rel="preload" href="css/main.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
     
     <!-- Sistema de Temas (Critical CSS) -->
     <link rel="stylesheet" href="css/themes.css">
@@ -23,17 +28,26 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
     
     <!-- Meta tags SEO -->
-    <meta name="description" content="Sistema profissional de análise e gerenciamento de equipamentos de informática">
-    <meta name="keywords" content="análise, computadores, equipamentos, TI, gerenciamento">
+    <meta name="description" content="Sistema profissional de análise e gerenciamento de equipamentos de informática. Dashboard completo com relatórios, sugestões de upgrade e controle de inventário.">
+    <meta name="keywords" content="análise, computadores, equipamentos, TI, gerenciamento, inventário, hardware, upgrade">
     <meta name="author" content="Wilmar Izequiel Kleinschmidt">
     <meta name="theme-color" content="#2563EB">
+    <meta name="color-scheme" content="dark">
+    <meta name="robots" content="noindex, nofollow">
     
     <!-- Open Graph -->
     <meta property="og:title" content="Sistema de Análise de Equipamentos">
-    <meta property="og:description" content="Gerenciamento profissional de computadores">
+    <meta property="og:description" content="Gerenciamento profissional de computadores e equipamentos de TI">
     <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+    
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <!-- Skip Link para Acessibilidade -->
@@ -57,7 +71,7 @@
                     <span>Gerenciamento de Equipamentos</span>
                 </div>
             </div>
-            <nav class="nav-menu">
+            <nav class="nav-menu" id="navMenu" role="navigation" aria-label="Menu principal">
                 <a href="index.html" class="nav-link active">
                     <i class="fas fa-home"></i>
                     <span>Início</span>
@@ -86,12 +100,12 @@
                     <i class="fas fa-user-circle"></i>
                     <span id="userNameDisplay">Usuário</span>
                 </div>
-                <button class="btn-logout" id="btnLogout" title="Sair">
-                    <i class="fas fa-sign-out-alt"></i>
+                <button class="btn-logout" id="btnLogout" title="Sair do sistema" aria-label="Sair do sistema">
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                 </button>
             </div>
-            <button class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="navMenu">
+                <i class="fas fa-bars" aria-hidden="true"></i>
             </button>
         </div>
     </header>
@@ -159,8 +173,8 @@
                     </div>
                 </div>
                 <div class="search-group">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Buscar por nome ou setor...">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por nome ou setor..." aria-label="Buscar equipamentos">
                 </div>
             </div>
         </div>
@@ -262,8 +276,9 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Sistema de Análise. Desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
+                <p>&copy; <span id="currentYear">2026</span> Sistema de Análise. Desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
             </div>
+            <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
         </div>
     </footer>
 

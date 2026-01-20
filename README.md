@@ -1,10 +1,26 @@
-# Sistema de Análise de Equipamentos
+# 🖥️ Sistema de Análise de Equipamentos
 
 Sistema web profissional para gerenciamento e análise de computadores com **Sistema de Temas Dinâmico**.
+
+![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
+![License](https://img.shields.io/badge/license-Proprietary-red.svg)
+![Status](https://img.shields.io/badge/status-Production-green.svg)
 
 **Desenvolvido por:** Wilmar Izequiel Kleinschmidt  
 **Email:** kogakleinscleins@gmail.com  
 **Telefone:** (48) 99185-0299
+
+---
+
+## ✨ Novidades v2.1.0
+
+- ✅ **Login Redesenhado**: Imagem de fundo visível com animação zoom
+- ✅ **Menu Mobile Fullscreen**: Animações staggered e touch-friendly
+- ✅ **Relatórios Funcionais**: Geração de PDF, CSV e relatórios individuais
+- ✅ **Orçamento Dinâmico**: Cálculo automático baseado em equipamentos
+- ✅ **Melhor Acessibilidade**: ARIA labels, focus states, reduced-motion
+- ✅ **Performance Otimizada**: Preload de recursos, skeleton loading
+- ✅ **Multi-Cliente**: Suporte a múltiplos clientes com dados isolados
 
 ---
 
@@ -28,27 +44,36 @@ O sistema possui dois temas visuais:
 
 ## 🚀 Funcionalidades
 
-### Sistema de Autenticação
+### 🔐 Sistema de Autenticação
 - **Login seguro** com dois níveis de acesso
 - **Admin**: Acesso completo ao painel administrativo
 - **Usuário**: Visualização apenas
+- Sessão persistente com expiração de 24h
 
-### Dashboard Principal
-- Cards interativos com todos os equipamentos
+### 📊 Dashboard Principal
+- Cards interativos com efeito 3D tilt
 - Filtros por status (Bom Estado, Atenção, Crítico)
 - Busca por nome, usuário ou setor
 - Estatísticas em tempo real
+- Skeleton loading durante carregamento
 
-### Painel Administrativo (Admin)
+### ⚙️ Painel Administrativo (Admin)
 - **CRUD de Equipamentos**: Criar, editar, excluir computadores
 - **Gerenciamento de Links**: Links de compra para upgrades
 - **Configurações**: Personalização do sistema
 - **Exportar/Importar**: Backup em JSON
 
-### Relatórios e Sugestões
-- Relatórios individuais por equipamento
-- Sugestões de upgrade priorizadas
-- Links diretos para compra
+### 📈 Relatórios e Sugestões
+- **Relatório Completo em PDF**: Todos os equipamentos
+- **Resumo Executivo**: Visão gerencial
+- **Exportação CSV**: Para Excel/planilhas
+- **Relatórios Individuais**: Por equipamento
+- **Orçamento Estimado**: Cálculo automático de upgrades
+
+### 🏢 Sistema Multi-Cliente
+- Gerenciamento de múltiplos clientes
+- Dados isolados por cliente
+- Temas personalizados por cliente
 
 ## 🔐 Credenciais de Acesso
 
@@ -60,14 +85,18 @@ O sistema possui dois temas visuais:
 - **Usuário:** `RS contabilidade`
 - **Senha:** `Rs3434-4099!@@#equipamentos??`
 
-## 🎨 Design
+## 🎨 Design & UX
 
 - **Sistema de Temas Dinâmico** (Azul padrão, Vermelho para RS)
-- **Imagem de fundo desfocada** para efeito premium
-- Efeitos Glassmorphism modernos
-- Animações suaves e partículas temáticas
-- 100% responsivo (mobile-first)
-- Luzes ambiente dinâmicas
+- **Imagem de fundo** com zoom animado e blur controlado
+- **Glassmorphism** moderno com backdrop-filter
+- **Microinterações**: Ripple, magnetic buttons, 3D tilt
+- **100% Responsivo** (mobile-first approach)
+- **Menu Mobile Fullscreen** com animações staggered
+- **Partículas temáticas** e luzes ambiente
+- **Skeleton Loading** para feedback visual
+- **Toast Notifications** para feedback de ações
+- **Acessibilidade WCAG**: Focus states, ARIA labels, reduced-motion
 
 ## 📁 Estrutura do Projeto
 
@@ -163,4 +192,30 @@ Projeto desenvolvido exclusivamente para RS Contabilidade.
 
 ---
 
-© 2026 - Desenvolvido por **Wilmar Izequiel Kleinschmidt**
+## 📋 Changelog
+
+### v2.1.0 (Janeiro 2025)
+- Melhorias de performance com preload de recursos
+- Meta tags SEO otimizadas
+- Acessibilidade WCAG melhorada
+- Skeleton loading aprimorado
+
+### v2.0.0 (Janeiro 2025)
+- Login redesenhado com imagem de fundo visível
+- Menu mobile fullscreen com animações
+- Sistema de relatórios funcional (PDF/CSV)
+- Orçamento dinâmico por equipamento
+- Sistema multi-cliente
+- Remoção de dados mockup
+- Correção de anos hardcoded
+
+### v1.0.0 (Dezembro 2024)
+- Release inicial
+- Sistema de temas dinâmico
+- Autenticação com roles
+- Dashboard com filtros
+- Painel administrativo
+
+---
+
+© 2025 - Desenvolvido por **Wilmar Izequiel Kleinschmidt**

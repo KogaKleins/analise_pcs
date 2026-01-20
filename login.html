@@ -2,12 +2,17 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Login | Sistema de Análise de Equipamentos</title>
     
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Preload -->
+    <link rel="preload" href="css/themes.css" as="style">
+    <link rel="preload" href="css/auth.css" as="style">
+    <link rel="preload" href="imagens/imagem.jpg" as="image">
     
     <!-- Sistema de Temas -->
     <link rel="stylesheet" href="css/themes.css">
@@ -19,12 +24,217 @@
     
     <!-- Meta tags -->
     <meta name="theme-color" content="#2563EB">
-    <meta name="description" content="Acesso ao Sistema de Análise de Equipamentos">
+    <meta name="color-scheme" content="dark">
+    <meta name="description" content="Acesso seguro ao Sistema de Análise de Equipamentos de Informática">
+    <meta name="robots" content="noindex, nofollow">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+    
+    <style>
+        /* Estilos adicionais para melhorar a tela de login */
+        .auth-body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+        }
+        
+        /* Imagem de fundo com melhor visibilidade */
+        .login-bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .login-bg-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            filter: blur(3px);
+            transform: scale(1.05);
+            animation: slowZoom 30s ease-in-out infinite alternate;
+        }
+        
+        @keyframes slowZoom {
+            from { transform: scale(1.05); }
+            to { transform: scale(1.15); }
+        }
+        
+        /* Overlay gradiente sobre a imagem */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(10, 10, 26, 0.9) 0%,
+                rgba(26, 26, 46, 0.85) 50%,
+                rgba(22, 33, 62, 0.9) 100%
+            );
+            z-index: 1;
+        }
+        
+        /* Card de login melhorado */
+        .auth-container {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Efeito de brilho no logo */
+        .auth-logo {
+            position: relative;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            box-shadow: 
+                0 10px 40px rgba(37, 99, 235, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        
+        .auth-logo::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        /* Versão info */
+        .version-info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
+            z-index: 20;
+        }
+        
+        /* Credenciais de teste (remover em produção) */
+        .demo-credentials {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .demo-credentials h4 {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 0 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .demo-credentials .credential-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .demo-credentials .credential {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .demo-credentials .credential:hover {
+            background: rgba(37, 99, 235, 0.2);
+            transform: translateX(4px);
+        }
+        
+        .demo-credentials .credential span {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+        }
+        
+        .demo-credentials .credential code {
+            color: var(--primary-light);
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+        
+        /* Animação de entrada melhorada */
+        .auth-container {
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Efeitos de foco melhorados */
+        .form-group input:focus {
+            background: rgba(37, 99, 235, 0.1);
+            border-color: var(--primary);
+            box-shadow: 
+                0 0 0 4px rgba(37, 99, 235, 0.15),
+                0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Botão de login melhorado */
+        .btn-login {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 
+                0 4px 15px rgba(37, 99, 235, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-login:hover {
+            box-shadow: 
+                0 8px 25px rgba(37, 99, 235, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+    </style>
 </head>
 <body class="auth-body">
+    <!-- Imagem de fundo -->
+    <div class="login-bg-image">
+        <img src="imagens/imagem.jpg" alt="" aria-hidden="true" onerror="this.style.display='none'">
+    </div>
+    
+    <!-- Overlay -->
+    <div class="login-overlay"></div>
+    
     <!-- Partículas de fundo -->
     <div class="particles-container" id="particles"></div>
     
@@ -54,6 +264,7 @@
                     placeholder="Digite seu usuário"
                     autocomplete="username"
                     required
+                    aria-describedby="usernameHelp"
                 >
                 <span class="input-focus-effect"></span>
             </div>
@@ -71,8 +282,9 @@
                         placeholder="Digite sua senha"
                         autocomplete="current-password"
                         required
+                        aria-describedby="passwordHelp"
                     >
-                    <button type="button" class="toggle-password" id="togglePassword">
+                    <button type="button" class="toggle-password" id="togglePassword" aria-label="Mostrar/ocultar senha">
                         <i class="fas fa-eye"></i>
                     </button>
                 </div>
@@ -98,7 +310,7 @@
             </button>
 
             <!-- Mensagem de erro -->
-            <div class="auth-error" id="authError">
+            <div class="auth-error" id="authError" role="alert">
                 <i class="fas fa-exclamation-circle"></i>
                 <span id="errorMessage">Usuário ou senha incorretos</span>
             </div>
@@ -114,6 +326,11 @@
                 Desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong>
             </p>
         </div>
+    </div>
+    
+    <!-- Versão -->
+    <div class="version-info">
+        v2.0.0 | Sistema de Análise
     </div>
 
     <!-- Decoração -->

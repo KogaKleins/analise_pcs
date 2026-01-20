@@ -100,40 +100,40 @@
                     </div>
                 </div>
                 <div class="reports-grid">
-                    <a href="#" class="report-card">
+                    <a href="#" class="report-card" onclick="gerarRelatorioPDF(event, 'completo')">
                         <div class="report-icon">
                             <i class="fas fa-file-pdf"></i>
                         </div>
                         <div class="report-info">
                             <h3>Relatório Completo</h3>
-                            <p>Análise de todos os 15 computadores</p>
-                            <span class="report-date"><i class="fas fa-calendar"></i> Janeiro 2026</span>
+                            <p>Análise de todos os <span id="totalEquipamentos">0</span> equipamentos</p>
+                            <span class="report-date"><i class="fas fa-calendar"></i> <span class="current-date">Janeiro 2026</span></span>
                         </div>
                         <div class="report-action">
                             <i class="fas fa-download"></i>
                         </div>
                     </a>
-                    <a href="#" class="report-card">
+                    <a href="#" class="report-card" onclick="exportarExcel(event)">
                         <div class="report-icon excel">
                             <i class="fas fa-file-excel"></i>
                         </div>
                         <div class="report-info">
                             <h3>Planilha de Dados</h3>
-                            <p>Especificações em formato Excel</p>
-                            <span class="report-date"><i class="fas fa-calendar"></i> Janeiro 2026</span>
+                            <p>Especificações em formato CSV</p>
+                            <span class="report-date"><i class="fas fa-calendar"></i> <span class="current-date">Janeiro 2026</span></span>
                         </div>
                         <div class="report-action">
                             <i class="fas fa-download"></i>
                         </div>
                     </a>
-                    <a href="#" class="report-card">
+                    <a href="#" class="report-card" onclick="gerarRelatorioPDF(event, 'resumo')">
                         <div class="report-icon chart">
                             <i class="fas fa-chart-pie"></i>
                         </div>
                         <div class="report-info">
                             <h3>Resumo Executivo</h3>
                             <p>Principais pontos e recomendações</p>
-                            <span class="report-date"><i class="fas fa-calendar"></i> Janeiro 2026</span>
+                            <span class="report-date"><i class="fas fa-calendar"></i> <span class="current-date">Janeiro 2026</span></span>
                         </div>
                         <div class="report-action">
                             <i class="fas fa-download"></i>
@@ -222,7 +222,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 RS Contabilidade. Sistema desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
+                <p>&copy; <span class="current-year">2026</span> RS Contabilidade. Sistema desenvolvido por <strong>Wilmar Izequiel Kleinschmidt</strong></p>
             </div>
         </div>
     </footer>
@@ -265,6 +265,14 @@
 
         // Render individual reports from Storage (com suporte a clientes)
         document.addEventListener('DOMContentLoaded', () => {
+            // Atualizar ano e data
+            document.querySelectorAll('.current-year').forEach(el => el.textContent = new Date().getFullYear());
+            
+            const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const dataAtual = `${meses[new Date().getMonth()]} ${new Date().getFullYear()}`;
+            document.querySelectorAll('.current-date').forEach(el => el.textContent = dataAtual);
+            
             const container = document.getElementById('individualReports');
             
             // Obter equipamentos (do cliente atual ou global)
@@ -283,12 +291,24 @@
                 equipamentos = Storage.getEquipamentos();
             }
             
+            // Atualizar contagem total
+            const totalEl = document.getElementById('totalEquipamentos');
+            if (totalEl) totalEl.textContent = equipamentos.length;
+            
             if (container) {
                 if (equipamentos.length === 0) {
-                    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); padding: 20px; text-align: center;">Nenhum equipamento cadastrado ainda.</p>';
+                    container.innerHTML = `
+                        <div class="empty-reports">
+                            <i class="fas fa-folder-open" style="font-size: 48px; color: var(--text-muted); margin-bottom: 16px;"></i>
+                            <p style="color: rgba(255,255,255,0.5); padding: 20px; text-align: center;">
+                                Nenhum equipamento cadastrado ainda.<br>
+                                <small>Adicione equipamentos para gerar relatórios.</small>
+                            </p>
+                        </div>
+                    `;
                 } else {
                     container.innerHTML = equipamentos.map(pc => `
-                        <a href="#" class="individual-report-item">
+                        <a href="#" class="individual-report-item" onclick="verRelatorioIndividual(event, '${pc.id}')">
                             <div class="report-pc-icon">
                                 <i class="fas fa-desktop"></i>
                             </div>
@@ -305,6 +325,373 @@
                 }
             }
         });
+        
+        // Funções de relatório
+        function gerarRelatorioPDF(event, tipo) {
+            event.preventDefault();
+            
+            let equipamentos = [];
+            if (typeof Clients !== 'undefined') {
+                const currentClient = Clients.getCurrent();
+                if (currentClient) {
+                    equipamentos = Clients.getEquipamentos(currentClient.id);
+                } else {
+                    equipamentos = Storage.getEquipamentos();
+                }
+            } else {
+                equipamentos = Storage.getEquipamentos();
+            }
+            
+            if (equipamentos.length === 0) {
+                alert('Nenhum equipamento cadastrado para gerar relatório.');
+                return;
+            }
+            
+            // Criar conteúdo do relatório
+            let conteudo = '';
+            const clienteNome = typeof Clients !== 'undefined' && Clients.getCurrent() 
+                ? Clients.getCurrent().nome 
+                : 'Sistema de Análise';
+            
+            if (tipo === 'completo') {
+                conteudo = gerarRelatorioCompleto(equipamentos, clienteNome);
+            } else {
+                conteudo = gerarResumoExecutivo(equipamentos, clienteNome);
+            }
+            
+            // Abrir em nova janela para impressão
+            const janela = window.open('', '_blank');
+            janela.document.write(conteudo);
+            janela.document.close();
+            janela.print();
+        }
+        
+        function gerarRelatorioCompleto(equipamentos, clienteNome) {
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+            const bons = equipamentos.filter(e => e.status === 'bom' || e.status === 'ok').length;
+            const atencao = equipamentos.filter(e => e.status === 'atencao').length;
+            const criticos = equipamentos.filter(e => e.status === 'critico').length;
+            
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Relatório Completo - ${clienteNome}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; color: #333; }
+                        h1 { color: #2563EB; border-bottom: 2px solid #2563EB; padding-bottom: 10px; }
+                        h2 { color: #1e40af; margin-top: 30px; }
+                        .header { display: flex; justify-content: space-between; margin-bottom: 30px; }
+                        .summary { display: flex; gap: 20px; margin: 20px 0; }
+                        .summary-item { padding: 15px 25px; border-radius: 8px; text-align: center; }
+                        .summary-item.ok { background: #dcfce7; color: #166534; }
+                        .summary-item.atencao { background: #fef3c7; color: #92400e; }
+                        .summary-item.critico { background: #fee2e2; color: #991b1b; }
+                        .summary-item strong { display: block; font-size: 24px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+                        th { background: #f3f4f6; font-weight: 600; }
+                        .status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+                        .status.bom, .status.ok { background: #dcfce7; color: #166534; }
+                        .status.atencao { background: #fef3c7; color: #92400e; }
+                        .status.critico { background: #fee2e2; color: #991b1b; }
+                        @media print { body { padding: 20px; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div>
+                            <h1>📊 Relatório de Equipamentos</h1>
+                            <p><strong>${clienteNome}</strong></p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p>Data: ${dataAtual}</p>
+                            <p>Total: ${equipamentos.length} equipamentos</p>
+                        </div>
+                    </div>
+                    
+                    <h2>Resumo</h2>
+                    <div class="summary">
+                        <div class="summary-item ok">
+                            <strong>${bons}</strong>
+                            Bom Estado
+                        </div>
+                        <div class="summary-item atencao">
+                            <strong>${atencao}</strong>
+                            Atenção
+                        </div>
+                        <div class="summary-item critico">
+                            <strong>${criticos}</strong>
+                            Crítico
+                        </div>
+                    </div>
+                    
+                    <h2>Lista de Equipamentos</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Usuário</th>
+                                <th>Setor</th>
+                                <th>Processador</th>
+                                <th>RAM</th>
+                                <th>Armazenamento</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${equipamentos.map(e => `
+                                <tr>
+                                    <td>${e.nome}</td>
+                                    <td>${e.usuario || '-'}</td>
+                                    <td>${e.setor || '-'}</td>
+                                    <td>${e.processador || '-'}</td>
+                                    <td>${e.ram || '-'}</td>
+                                    <td>${e.armazenamento || e.storage || '-'}</td>
+                                    <td><span class="status ${e.status}">${e.status === 'bom' || e.status === 'ok' ? 'Bom' : e.status === 'atencao' ? 'Atenção' : 'Crítico'}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280;">
+                        <p>Relatório gerado automaticamente pelo Sistema de Análise de Equipamentos</p>
+                        <p>Desenvolvido por Wilmar Izequiel Kleinschmidt</p>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+        
+        function gerarResumoExecutivo(equipamentos, clienteNome) {
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+            const bons = equipamentos.filter(e => e.status === 'bom' || e.status === 'ok').length;
+            const atencao = equipamentos.filter(e => e.status === 'atencao').length;
+            const criticos = equipamentos.filter(e => e.status === 'critico').length;
+            const percentBons = ((bons / equipamentos.length) * 100).toFixed(0);
+            
+            const equipAtencao = equipamentos.filter(e => e.status === 'atencao' || e.status === 'critico');
+            
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Resumo Executivo - ${clienteNome}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; color: #333; max-width: 800px; margin: 0 auto; }
+                        h1 { color: #2563EB; }
+                        .highlight { background: linear-gradient(135deg, #2563EB, #1e40af); color: white; padding: 30px; border-radius: 12px; margin: 20px 0; }
+                        .highlight h2 { color: white; margin: 0; }
+                        .highlight p { color: rgba(255,255,255,0.9); margin: 10px 0 0; }
+                        .metric { display: inline-block; text-align: center; padding: 20px 40px; }
+                        .metric strong { display: block; font-size: 36px; }
+                        .recommendations { background: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0; }
+                        .recommendations h3 { color: #92400e; margin-top: 0; }
+                        .recommendations ul { margin: 0; padding-left: 20px; }
+                        .recommendations li { margin: 8px 0; color: #78350f; }
+                        @media print { body { padding: 20px; } }
+                    </style>
+                </head>
+                <body>
+                    <h1>📈 Resumo Executivo</h1>
+                    <p><strong>${clienteNome}</strong> | ${dataAtual}</p>
+                    
+                    <div class="highlight">
+                        <h2>${percentBons}% dos equipamentos em bom estado</h2>
+                        <p>De ${equipamentos.length} equipamentos analisados, ${bons} estão funcionando adequadamente.</p>
+                    </div>
+                    
+                    <h2>Visão Geral</h2>
+                    <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
+                        <div class="metric">
+                            <strong style="color: #166534;">${bons}</strong>
+                            <span>Bom Estado</span>
+                        </div>
+                        <div class="metric">
+                            <strong style="color: #92400e;">${atencao}</strong>
+                            <span>Atenção</span>
+                        </div>
+                        <div class="metric">
+                            <strong style="color: #991b1b;">${criticos}</strong>
+                            <span>Crítico</span>
+                        </div>
+                    </div>
+                    
+                    ${equipAtencao.length > 0 ? `
+                        <div class="recommendations">
+                            <h3>⚠️ Equipamentos que Necessitam Atenção</h3>
+                            <ul>
+                                ${equipAtencao.map(e => `
+                                    <li><strong>${e.nome}</strong> (${e.usuario || 'N/A'}): ${e.recomendacoes || e.observacoes || 'Verificar especificações'}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    ` : '<p style="color: #166534;">✅ Todos os equipamentos estão em bom estado!</p>'}
+                    
+                    <div style="margin-top: 40px; text-align: center; color: #6b7280;">
+                        <p>Sistema de Análise de Equipamentos | Wilmar Izequiel Kleinschmidt</p>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+        
+        function exportarExcel(event) {
+            event.preventDefault();
+            
+            let equipamentos = [];
+            if (typeof Clients !== 'undefined') {
+                const currentClient = Clients.getCurrent();
+                if (currentClient) {
+                    equipamentos = Clients.getEquipamentos(currentClient.id);
+                } else {
+                    equipamentos = Storage.getEquipamentos();
+                }
+            } else {
+                equipamentos = Storage.getEquipamentos();
+            }
+            
+            if (equipamentos.length === 0) {
+                alert('Nenhum equipamento cadastrado para exportar.');
+                return;
+            }
+            
+            // Criar CSV
+            const headers = ['Nome', 'Usuário', 'Setor', 'Processador', 'RAM', 'Armazenamento', 'GPU', 'SO', 'Status', 'Observações', 'Recomendações'];
+            const rows = equipamentos.map(e => [
+                e.nome || '',
+                e.usuario || '',
+                e.setor || '',
+                e.processador || '',
+                e.ram || '',
+                e.armazenamento || e.storage || '',
+                e.gpu || '',
+                e.sistemaOperacional || e.so || '',
+                e.status || '',
+                e.observacoes || '',
+                e.recomendacoes || ''
+            ]);
+            
+            let csv = headers.join(';') + '\\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(';') + '\\n';
+            });
+            
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `equipamentos_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+        
+        function verRelatorioIndividual(event, pcId) {
+            event.preventDefault();
+            
+            let equipamento;
+            if (typeof Clients !== 'undefined') {
+                const currentClient = Clients.getCurrent();
+                if (currentClient) {
+                    const equipamentos = Clients.getEquipamentos(currentClient.id);
+                    equipamento = equipamentos.find(e => e.id === pcId);
+                } else {
+                    equipamento = Storage.getEquipamento(pcId);
+                }
+            } else {
+                equipamento = Storage.getEquipamento(pcId);
+            }
+            
+            if (!equipamento) {
+                alert('Equipamento não encontrado.');
+                return;
+            }
+            
+            const clienteNome = typeof Clients !== 'undefined' && Clients.getCurrent() 
+                ? Clients.getCurrent().nome 
+                : 'Sistema de Análise';
+            
+            const conteudo = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Relatório - ${equipamento.nome}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; color: #333; max-width: 800px; margin: 0 auto; }
+                        h1 { color: #2563EB; }
+                        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0; }
+                        .info-item { background: #f3f4f6; padding: 16px; border-radius: 8px; }
+                        .info-item label { font-size: 12px; color: #6b7280; text-transform: uppercase; }
+                        .info-item p { margin: 4px 0 0; font-weight: 600; }
+                        .status { display: inline-block; padding: 6px 16px; border-radius: 20px; font-weight: 600; }
+                        .status.bom, .status.ok { background: #dcfce7; color: #166534; }
+                        .status.atencao { background: #fef3c7; color: #92400e; }
+                        .status.critico { background: #fee2e2; color: #991b1b; }
+                        @media print { body { padding: 20px; } }
+                    </style>
+                </head>
+                <body>
+                    <h1>💻 ${equipamento.nome}</h1>
+                    <p>${clienteNome} | ${new Date().toLocaleDateString('pt-BR')}</p>
+                    
+                    <span class="status ${equipamento.status}">${equipamento.status === 'bom' || equipamento.status === 'ok' ? 'Bom Estado' : equipamento.status === 'atencao' ? 'Atenção' : 'Crítico'}</span>
+                    
+                    <h2>Informações Gerais</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Usuário</label>
+                            <p>${equipamento.usuario || 'Não informado'}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Setor</label>
+                            <p>${equipamento.setor || 'Não informado'}</p>
+                        </div>
+                    </div>
+                    
+                    <h2>Especificações</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Processador</label>
+                            <p>${equipamento.processador || 'Não informado'}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Memória RAM</label>
+                            <p>${equipamento.ram || 'Não informado'}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Armazenamento</label>
+                            <p>${equipamento.armazenamento || equipamento.storage || 'Não informado'}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Placa de Vídeo</label>
+                            <p>${equipamento.gpu || 'Não informado'}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Sistema Operacional</label>
+                            <p>${equipamento.sistemaOperacional || equipamento.so || 'Não informado'}</p>
+                        </div>
+                    </div>
+                    
+                    ${equipamento.observacoes ? `
+                        <h2>Observações</h2>
+                        <p>${equipamento.observacoes}</p>
+                    ` : ''}
+                    
+                    ${equipamento.recomendacoes ? `
+                        <h2>Recomendações</h2>
+                        <p style="background: #fef3c7; padding: 16px; border-radius: 8px; color: #78350f;">${equipamento.recomendacoes}</p>
+                    ` : ''}
+                    
+                    <div style="margin-top: 40px; text-align: center; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 20px;">
+                        <p>Sistema de Análise de Equipamentos | Wilmar Izequiel Kleinschmidt</p>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            const janela = window.open('', '_blank');
+            janela.document.write(conteudo);
+            janela.document.close();
+        }
     </script>
 </body>
 </html>
