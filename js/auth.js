@@ -251,13 +251,16 @@ const Auth = {
     // Logout
     logout() {
         localStorage.removeItem('rs_session');
-        window.location.href = 'login.html';
+        // Detectar se estamos em subpasta
+        const isInSubfolder = window.location.pathname.includes('/pages/');
+        window.location.href = isInSubfolder ? '../login.html' : 'login.html';
     },
 
     // Proteger página (redireciona se não autenticado)
     requireAuth() {
         if (!this.isAuthenticated()) {
-            window.location.href = 'login.html';
+            const isInSubfolder = window.location.pathname.includes('/pages/');
+            window.location.href = isInSubfolder ? '../login.html' : 'login.html';
             return false;
         }
         return true;
@@ -265,12 +268,13 @@ const Auth = {
 
     // Proteger página admin
     requireAdmin() {
+        const isInSubfolder = window.location.pathname.includes('/pages/');
         if (!this.isAuthenticated()) {
-            window.location.href = 'login.html';
+            window.location.href = isInSubfolder ? '../login.html' : 'login.html';
             return false;
         }
         if (!this.isAdmin()) {
-            window.location.href = 'index.html';
+            window.location.href = isInSubfolder ? '../index.html' : 'index.html';
             return false;
         }
         return true;
