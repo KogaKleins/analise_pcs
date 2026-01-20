@@ -3,9 +3,72 @@
    Sistema de Temas Dinâmico
    ======================================== */
 
+/* Admin Header Bar */
+.admin-header-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 12px 0;
+}
+
+.admin-header-bar .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.admin-header-bar .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.admin-header-bar .logo i {
+    font-size: 1.5rem;
+    color: var(--primary-light);
+}
+
+.admin-header-bar .nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-header-bar .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.admin-header-bar .nav-item:hover {
+    color: var(--text-primary);
+    background: var(--glass-bg-hover);
+}
+
+.admin-header-bar .nav-item i {
+    font-size: 1rem;
+}
+
 /* Admin Badge */
 .admin-badge {
-    background: var(--accent-gradient, linear-gradient(135deg, #f39c12, #e67e22));
+    background: var(--primary-gradient);
     color: white;
     font-size: 0.65rem;
     padding: 3px 8px;
@@ -14,7 +77,7 @@
     font-weight: 700;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    box-shadow: var(--glow-accent);
+    box-shadow: var(--glow-primary);
 }
 
 /* Header Actions */
@@ -527,7 +590,7 @@
 }
 
 .form-group select option {
-    background: #1a0a0a;
+    background: var(--bg-darker);
     color: white;
 }
 
@@ -608,8 +671,8 @@
     width: 100%;
     max-width: 500px;
     max-height: 90vh;
-    background: linear-gradient(135deg, #1a0a0a 0%, #2d0a0a 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-darker);
+    border: 1px solid var(--glass-border);
     border-radius: 20px;
     overflow: hidden;
     animation: modalIn 0.3s ease;

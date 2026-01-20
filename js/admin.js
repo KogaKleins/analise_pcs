@@ -171,6 +171,30 @@ const AdminPanel = {
     },
 
     /**
+     * Popula o dropdown de clientes
+     */
+    populateClientDropdown() {
+        const select = document.getElementById('eqCliente');
+        if (!select) return;
+
+        // Limpa opções existentes (exceto placeholder)
+        select.innerHTML = '<option value="">Selecione um cliente</option>';
+
+        // Busca clientes do sistema
+        if (typeof Clients !== 'undefined') {
+            const clientes = Clients.getAll();
+            clientes.forEach(cliente => {
+                if (cliente.ativo) {
+                    const option = document.createElement('option');
+                    option.value = cliente.id;
+                    option.textContent = cliente.nome;
+                    select.appendChild(option);
+                }
+            });
+        }
+    },
+
+    /**
      * Abre modal de equipamento (novo ou edição)
      */
     openEquipamentoModal(id = null) {
@@ -178,6 +202,9 @@ const AdminPanel = {
         const modal = document.getElementById('modalEquipamento');
         const title = document.getElementById('modalEquipamentoTitle');
         const form = document.getElementById('formEquipamento');
+
+        // Popular dropdown de clientes
+        this.populateClientDropdown();
 
         if (id) {
             const eq = Storage.getEquipamento(id);
@@ -188,6 +215,11 @@ const AdminPanel = {
         } else {
             title.textContent = 'Novo Equipamento';
             form.reset();
+            // Seleciona cliente atual se houver
+            const currentClient = typeof Clients !== 'undefined' ? Clients.getCurrent() : null;
+            if (currentClient) {
+                document.getElementById('eqCliente').value = currentClient.id;
+            }
         }
 
         modal.classList.add('show');
@@ -212,12 +244,26 @@ const AdminPanel = {
         document.getElementById('eqSo').value = eq.so || '';
         document.getElementById('eqObservacoes').value = eq.observacoes || '';
         document.getElementById('eqRecomendacoes').value = eq.recomendacoes || '';
+        // Cliente do equipamento
+        if (document.getElementById('eqCliente') && eq.clienteId) {
+            document.getElementById('eqCliente').value = eq.clienteId;
+        }
     },
 
     /**
      * Salva equipamento
      */
     saveEquipamento() {
+        // Obter cliente selecionado
+        const clienteSelect = document.getElementById('eqCliente');
+        const clienteId = clienteSelect ? clienteSelect.value : null;
+
+        // Validação de cliente
+        if (!clienteId) {
+            this.showToast('Selecione um cliente', 'error');
+            return;
+        }
+
         const dados = {
             nome: document.getElementById('eqNome').value,
             usuario: document.getElementById('eqUsuario').value,
@@ -232,7 +278,8 @@ const AdminPanel = {
             gpu: document.getElementById('eqGpu').value,
             so: document.getElementById('eqSo').value,
             observacoes: document.getElementById('eqObservacoes').value,
-            recomendacoes: document.getElementById('eqRecomendacoes').value
+            recomendacoes: document.getElementById('eqRecomendacoes').value,
+            clienteId: clienteId
         };
 
         // Validação
@@ -243,10 +290,20 @@ const AdminPanel = {
 
         try {
             if (this.currentEditId) {
-                Storage.updateEquipamento(this.currentEditId, dados);
+                // Atualizar equipamento existente
+                if (typeof Clients !== 'undefined') {
+                    Clients.updateEquipamento(this.currentEditId, dados, clienteId);
+                } else {
+                    Storage.updateEquipamento(this.currentEditId, dados);
+                }
                 this.showToast('Equipamento atualizado com sucesso!', 'success');
             } else {
-                Storage.addEquipamento(dados);
+                // Novo equipamento
+                if (typeof Clients !== 'undefined') {
+                    Clients.addEquipamento(dados, clienteId);
+                } else {
+                    Storage.addEquipamento(dados);
+                }
                 this.showToast('Equipamento cadastrado com sucesso!', 'success');
             }
 
